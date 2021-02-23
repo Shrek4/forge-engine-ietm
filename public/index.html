@@ -1,0 +1,185 @@
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Цифровой двойник Forge</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=no" />
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css"
+        type="text/css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/highcharts.css">
+    <link rel="stylesheet" href="css/blink.css">
+
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+</head>
+
+<body>
+
+    <div id="viewer">
+        <img src="forge.png" class="logo">
+    </div>
+    <div id="sidebar">
+        <ul class="nav nav-pills nav-fill mb-3" id="sidebar-pills" role="tablist">
+            <li class="nav-item"><a class="nav-link active" id="performance-tab" data-toggle="pill" href="#performance"
+                    role="tab" aria-controls="performance" aria-selected="true">Внешний вид</a></li>
+            <li class="nav-item"><a class="nav-link" id="procurement-tab" data-toggle="pill" href="#procurement"
+                    role="tab" aria-controls="procurement" aria-selected="false">Детали</a></li>
+        </ul>
+        <div class="tab-content" id="sidebar-pills-content">
+            <div class="tab-pane fade show active" id="performance" role="tabpanel" aria-labelledby="performance-tab">
+                <ul class="nav nav-tabs mb-3 nav-fill" id="performance-tabs" role="tablist">
+                    <li class="nav-item"><a class="nav-link active" id="performance-general-tab" data-toggle="tab"
+                            href="#performance-general" role="tab" aria-controls="performance-general"
+                            aria-selected="false">Главное</a></li>
+                    <li class="nav-item"><a class="nav-link" id="performance-part-tab" data-toggle="tab"
+                            href="#performance-part" role="tab" aria-controls="performance-part"
+                            aria-selected="true">Деталь</a></li>
+                </ul>
+                <div class="tab-content" id="procurement-tabs-content">
+                    <div class="tab-pane fade show active" id="performance-general" role="tabpanel"
+                        aria-labelledby="performance-general-tab">
+                        <h5>Скорость двигателя</h5><canvas id="engine-speed-chart" width="100%"></canvas>
+                        <h5>Вибрация</h5><canvas id="engine-vibrations-chart" width="100%"></canvas>
+                        <button id="startanimation" type="button" class="btn btn-primary btn-block" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="animSwitch()">Запустить анимацию</button>
+                    </div>
+                    <div class="tab-pane fade" id="performance-part" role="tabpanel"
+                        aria-labelledby="performance-part-tab">
+                        <div class="alert alert-secondary">Выберите деталь</div>
+                        <h5>Текущая температура</h5><svg id="part-current-temperature" width="250" height="100">
+                            <defs>
+                                <mask id="gauge-mask">
+                                    <circle fill="white" cx="125" cy="100" r="75"></circle>
+                                    <circle fill="black" cx="125" cy="100" r="50"></circle>
+                                </mask>
+                            </defs>
+                            <polygon points="125,100 0,100 0,0" fill="green" mask="url(#gauge-mask)"></polygon>
+                            <polygon points="125,100 0,0 250,0" fill="orange" mask="url(#gauge-mask)"></polygon>
+                            <polygon points="125,100 250,0 250,100" fill="red" mask="url(#gauge-mask)"></polygon><text
+                                fill="gray" x="25" y="100">0°</text><text fill="gray" x="40" y="50">25°</text><text
+                                fill="gray" x="190" y="50">75°</text><text fill="gray" x="210" y="100">100°</text>
+                            <polygon id="gauge-needle" points="125,105 120,100 100,25 130,100" fill="black"
+                                transform="rotate(-30,125,125)"></polygon>
+                        </svg>
+                        <h5>История температуры</h5><canvas id="part-temperatures-chart" width="100%"></canvas>
+                        <form id="temperature-alert-form">
+                            <h5>Макс. температура</h5>
+                            <div class="row mb-2"><label class="col-sm-2 col-form-label"
+                                    for="temperature-alert-part">Деталь #</label>
+                                <div class="col-sm-2"><input class="form-control-plaintext" id="temperature-alert-part"
+                                        type="text" readonly="" value="123"></div><label class="col-sm-4 col-form-label"
+                                    for="temperature-alert-max">Мексимальная температура [C]</label>
+                                <div class="col-sm-4"><input class="form-control" id="temperature-alert-max" type="text"
+                                        value=""></div>
+                            </div><button class="btn btn-primary mr-2">Установить</button><button
+                                class="btn btn-secondary">Очистить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="procurement" role="tabpanel" aria-labelledby="procurement-tab">
+                <ul class="nav nav-tabs mb-3 nav-fill" id="procurement-tabs" role="tablist">
+                    <li class="nav-item"><a class="nav-link active" id="procurement-purchases-tab" data-toggle="tab"
+                            href="#procurement-purchases" role="tab" aria-controls="procurement-purchases"
+                            aria-selected="false">База данных</a></li>
+                </ul>
+                <div class="tab-content" id="procurement-tabs-content">
+                    <div class="tab-pane fade show active" id="procurement-purchases" role="tabpanel"
+                        aria-labelledby="procurement-purchases-tab">
+                        <h5>Список деталей</h5>
+                        <table class="table table-hover table-sm" id="purchases">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Дата</th>
+                                    <th scope="col">Номер</th>
+                                    <th scope="col">Производитель</th>
+                                    <th scope="col">Стоимость</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span
+                                            aria-hidden="true">&laquo;</span></a></li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span
+                                            aria-hidden="true">&raquo;</span></a></li>
+                            </ul>
+                        </nav>
+                        <h5>Новая деталь</h5>
+                        <form id="purchase-form">
+                            <div class="row"><label class="col-sm-2 col-form-label" for="purchase-part">Номер</label>
+                                <div class="col-sm-10"><input class="form-control-plaintext" id="purchase-part"
+                                        type="text" readonly="" value="123"></div>
+                            </div>
+                            <div class="row"><label class="col-sm-2 col-form-label"
+                                    for="purchase-supplier">Производитель</label>
+                                <div class="col-sm-10"><select class="form-control form-control-sm"
+                                        id="purchase-supplier">
+                                        <option>Foo Inc.</option>
+                                        <option>Bar Ltd.</option>
+                                        <option>Baz GmbH.</option>
+                                    </select></div>
+                            </div>
+                            <div class="row"><label class="col-sm-2 col-form-label" for="purchase-price">Стоимость</label>
+                                <div class="col-sm-10"><input class="form-control-plaintext" id="purchase-price"
+                                        type="text" readonly="" value="$0.00"></div>
+                            </div><button class="btn btn-primary btn-block" type="submit">Добавить</button>
+                        </form>
+                        <div class="modal fade" id="purchase-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <p>...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lib Scripts -->
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+        </script>
+    <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
+
+
+    <!-- My Scripts -->
+    <script src="scripts/viewer.js"></script>
+    <script src="scripts/animation.js"></script>
+    <!--
+    <script src="scripts/socketClient.js"></script>
+    <script src="scripts/connectionStatus.js"></script>
+    <script src="scripts/driver.js"></script>
+    <script src="scripts/circlefit.js"></script>
+    <script src="scripts/itemsTable.js"></script>
+    <script src="scripts/highcharts.js"></script>
+    <script src="scripts/measurementCalc.js"></script>
+    -->
+
+</body>
+
+</html>
