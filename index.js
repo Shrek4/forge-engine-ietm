@@ -2,8 +2,8 @@ const express = require('express')
 const Axios = require('axios');
 const bodyParser = require('body-parser');
 const WebSocket = require('ws');
-const FORGE_CLIENT_ID=process.env.FORGE_CLIENT_ID;
-const FORGE_CLIENT_SECRET=process.env.FORGE_CLIENT_SECRET;
+const FORGE_CLIENT_ID= "A90ZYBE6V9tKBKoH3dXrUE9waQGcdFF0";
+const FORGE_CLIENT_SECRET= "EIIW4U9y8svJh96j";
 const WEB_SOCKET_PORT = 3030;
 
 const app = express();
@@ -12,7 +12,6 @@ app.use(express.static(__dirname + '/public'));
 const port = process.env.PORT || 3000;
 
 const querystring = require('querystring');
-const { WSASERVICE_NOT_FOUND } = require('constants');
 let access_token = '';
 const scopes = 'data:read data:write data:create bucket:create bucket:read';
 
@@ -56,8 +55,6 @@ wss.on("close", () => console.log("WSS closed"));
 wss.on("error", () => console.log("WSS error"));
 wss.on("listening", () => console.log("WSS listening"));
 
-const bucketKey = FORGE_CLIENT_ID.toLowerCase() + '_tutorial_bucket'; // Prefix with your ID so the bucket key is unique across all buckets on all other accounts
-const policyKey = 'transient'; // Expires in 24hr
 
 const os = require('os');
 function getIp() {

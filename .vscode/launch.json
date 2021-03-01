@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+    
         {
             "type": "node",
             "request": "launch",
@@ -12,12 +13,6 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\index.js",
-            "env": {
-                "FORGE_CLIENT_ID": "A90ZYBE6V9tKBKoH3dXrUE9waQGcdFF0",
-                "FORGE_CLIENT_SECRET": "EIIW4U9y8svJh96j",
-                "FORGE_MODEL_URN": "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTAxLTMwLTE3LTU3LTQxLWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL2VuZ2luZSUyMDIlMjB2Mi5mM2Q",
-                "MONGODB_URL": "mongodb+srv://Man:1234@cluster0.ohrcx.mongodb.net/sample_analytics?retryWrites=true&w=majority"
-            }
         }
     ]
 }
