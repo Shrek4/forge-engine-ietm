@@ -20,16 +20,6 @@
 </head>
 
 <body>
-    <script>
-        function openNav() {
-            document.getElementById("mySidenav").style.width = "250px";
-        }
-
-        function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-        }
-    </script>
-
     <div id="viewer">
         <img src="forge.png" class="logo">
     </div>
@@ -41,19 +31,19 @@
                 <li><a href="#">Главная</a></li>
                 <li><a href="#">Информация о детали</a></li>
                 <li><a href="#">Обслуживание</a></li>
-                <ul class="sublist">
+                <ul>
                     <li><a href="#">Процедуры обслуживания</a></li>
                     <li><a href="#">Инструменты и запасные части</a></li>
                 </ul>
                 <li><a href="#">Ремонт</a></li>
-                <ul class="sublist">
+                <ul>
                     <li><a href="#">Процедуры ремонта</a></li>
                     <li><a href="#">Инструменты и запасные части</a></li>
                 </ul>
             </ul>
         </div>
         <span id="navbutton" style="font-size:30px;cursor:pointer" onclick="openNav()">☰ Меню</span>
-        <div>
+        <div id="info">
             <h1>Информация о двигателе</h1>
         </div>
 
@@ -72,6 +62,7 @@
 
     <!-- My Scripts -->
     <script src="scripts/viewer.js"></script>
+    <script src="scripts/navbar.js"></script>
     <script src="scripts/animation.js"></script>
 
 </body>
