@@ -21,7 +21,7 @@
 
 <body>
     <div id="viewer">
-        <img src="forge.png" class="logo">
+        <img src="../images/forge.png" class="logo">
     </div>
 
     <div id="sidebar">
@@ -33,6 +33,10 @@
                 <li><a href="#">Обслуживание</a></li>
                 <ul>
                     <li><a href="#">Процедуры обслуживания</a></li>
+                    <ul class="sublist">
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                    </ul>
                     <li><a href="#">Инструменты и запасные части</a></li>
                 </ul>
                 <li><a href="#">Ремонт</a></li>
@@ -42,9 +46,16 @@
                 </ul>
             </ul>
         </div>
-        <span id="navbutton" style="font-size:30px;cursor:pointer" onclick="openNav()">☰ Меню</span>
+        <div>
+            <span id="navbutton" style="font-size:30px;cursor:pointer" onclick="openNav()">☰ Меню</span>
+            <img class="print-doc" style="width:30px;cursor:pointer;margin:5px;" onclick="CallPrint('info')"
+                src="../images/printer.png" alt="Распечатать">
+        </div>
+
         <div id="info">
             <h1>Информация о двигателе</h1>
+            <p>Первое поколение данных силовых агрегатов появилось в 1991 году и сперва называлось Zeta, но из-за спора с компанией Lancia за торговую марку вскоре обрело привычное название Zetec. Это были вполне классические для своего времени 4-цилиндровые моторы с чугунным блоком, ременным приводом ГРМ, алюминиевой 16-клапанной DOHC головкой и гидрокомпенсаторами.</p>
+            <img src="https://icdn.lenta.ru/images/2018/07/10/14/20180710142618184/original_d36ed6a1c778bd41f75927a12c1bf0e8.jpg" style="width:100%;" alt="Zetec">
         </div>
 
     </div>

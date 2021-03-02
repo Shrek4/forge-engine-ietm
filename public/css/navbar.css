@@ -42,3 +42,8 @@
     position:fixed;
     right:10px;
 }
+
+.sublist a{
+    font-size: 18px;
+    padding: 4px;
+}
