@@ -30,5 +30,4 @@ function CallPrint(strid) {
     WinPrint.document.close();
     WinPrint.focus();
     WinPrint.print();
-    //WinPrint.close();
 }

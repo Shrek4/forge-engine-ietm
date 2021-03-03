@@ -2,9 +2,8 @@ const express = require('express')
 const Axios = require('axios');
 const bodyParser = require('body-parser');
 const WebSocket = require('ws');
-const FORGE_CLIENT_ID= "A90ZYBE6V9tKBKoH3dXrUE9waQGcdFF0";
-const FORGE_CLIENT_SECRET= "EIIW4U9y8svJh96j";
-const WEB_SOCKET_PORT = 3030;
+const FORGE_CLIENT_ID = "A90ZYBE6V9tKBKoH3dXrUE9waQGcdFF0";
+const FORGE_CLIENT_SECRET = "EIIW4U9y8svJh96j";
 
 const app = express();
 app.use(bodyParser.json());
@@ -41,21 +40,6 @@ app.get('/oauth', function (req, res) {
         });
 });
 
-
-let wsCount = 0;
-const wss = new WebSocket.Server({ port: WEB_SOCKET_PORT });//{ port: 3030 }
-wss.on('connection', function connection(ws) {
-    let wsNum = wsCount++;
-    console.log("WSS - new client ws " + wsNum + " connected to server")
-    ws.on("open", () => console.log("ws " + wsNum + " opened"));
-    ws.on("close", () => console.log("ws " + wsNum + " closed"));
-    ws.on("error", () => console.log("ws " + wsNum + " error"));
-});
-wss.on("close", () => console.log("WSS closed"));
-wss.on("error", () => console.log("WSS error"));
-wss.on("listening", () => console.log("WSS listening"));
-
-
 const os = require('os');
 function getIp() {
     for (let key in os.networkInterfaces()) {
@@ -74,3 +58,18 @@ app.listen(port, () => {
     console.log('Net address:  http://' + ipAddress + ':' + port);
 });
 
+const sqlite3 = require('sqlite3').verbose();
+var parts = "";
+// open the database
+let db = new sqlite3.Database('info.db', sqlite3.OPEN_READONLY, (err) => {
+    if (err) {
+        console.error(err.message);
+    }
+    console.log('Connected to the database.');
+});
+
+db.all("SELECT * FROM parts", [], (err, rows) => {
+    if (err) {
+        console.error(err.message);
+    }
+});
