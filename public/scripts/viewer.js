@@ -1,5 +1,5 @@
 let viewer;
-let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTAzLTAyLTE4LTIxLTQ4LWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lJTIwdjguZjNk"
+let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTAzLTA0LTIxLTMzLTU3LWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lLmYzZA"
 
 const options = {
     env: "AutodeskProduction",
@@ -111,4 +111,13 @@ function onDocumentLoadSuccess(doc) {
 
 function onDocumentLoadFailure() {
     console.error("Failed fetching Forge manifest");
+}
+
+function viewerclick(){
+    if(document.getElementById('partdesc')) {
+        let shrek=viewer.getSelection()[0];
+        if(shrek) showPartDescription(shrek);
+    }
+    let shrek=viewer.getSelection()[0];
+    console.log(shrek)
 }
