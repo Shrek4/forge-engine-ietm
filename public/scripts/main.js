@@ -1,3 +1,4 @@
+
 function openNav() {
     document.getElementById("mySidenav").style.width = "300px";
 }
@@ -31,3 +32,5 @@ function CallPrint(strid) {
     WinPrint.focus();
     WinPrint.print();
 }
+
+showPartDescription(0);

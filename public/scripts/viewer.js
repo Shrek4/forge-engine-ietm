@@ -104,13 +104,11 @@ function onDocumentLoadSuccess(doc) {
     const defaultModel = doc.getRoot().getDefaultGeometry();
     viewer.loadDocumentNode(doc, defaultModel);
 
-    let animationsFolder = doc.getRoot().search({ 'type': 'folder', 'role': 'animation' });
-    if (animationsFolder.length == 0) console.error("Модель не содержит анимаций");
-    else loadAnimation(doc, 0);
+    // let animationsFolder = doc.getRoot().search({ 'type': 'folder', 'role': 'animation' });
+    // if (animationsFolder.length == 0) console.error("Модель не содержит анимаций");
+    // else loadAnimation(doc, 0);
 }
 
 function onDocumentLoadFailure() {
     console.error("Failed fetching Forge manifest");
 }
-
-
