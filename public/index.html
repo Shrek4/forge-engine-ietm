@@ -19,7 +19,7 @@
 </head>
 
 <body>
-    <div id="viewer">
+    <div id="viewer" onclick="onViewerClick()">
         <img src="../images/forge.png" class="logo">
     </div>
 
@@ -27,8 +27,8 @@
         <div id="mySidenav" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
             <ul>
-                <li><a href="#">Главная</a></li>
-                <li><a href="#">Информация о детали</a></li>
+                <li><a href="#" onclick="showEngineDescription()">Главная</a></li>
+                <li><a href="#" onclick="selectionPart()">Информация о детали</a></li>
                 <li><a href="#">Обслуживание</a></li>
                 <ul>
                     <li><a href="#">Процедуры обслуживания</a></li>

@@ -1,3 +1,4 @@
+showEngineDescription();
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "300px";
@@ -33,4 +34,9 @@ function CallPrint(strid) {
     WinPrint.print();
 }
 
-showPartDescription(0);
+function selectionPart(){
+    document.getElementById('info').innerHTML=`<h1>Информация о детали:</h1>
+    <div id="partdesc">
+        <p>Выберите деталь</p>
+    </div>`
+}
