@@ -113,15 +113,6 @@ function onDocumentLoadFailure() {
     console.error("Failed fetching Forge manifest");
 }
 
-<<<<<<< HEAD
-function viewerclick(){
-    if(document.getElementById('partdesc')) {
-        let shrek=viewer.getSelection()[0];
-        if(shrek) showPartDescription(shrek);
-    }
-    let shrek=viewer.getSelection()[0];
-    console.log(shrek)
-=======
 function onViewerClick(){
     if(document.getElementById('partdesc')) {
         let shrek = viewer.getSelection()[0];
@@ -130,5 +121,4 @@ function onViewerClick(){
             showPartDescription(shrek);
         }
     }
->>>>>>> b24a0be4f5250e64d7c4f34bac0fb4f2ee34161a
 }
