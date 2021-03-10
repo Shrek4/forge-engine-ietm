@@ -40,3 +40,7 @@ function selectionPart(){
         <p>Выберите деталь</p>
     </div>`
 }
+
+function startAnimation(id){
+    loadAnimation(doc1, id);
+}

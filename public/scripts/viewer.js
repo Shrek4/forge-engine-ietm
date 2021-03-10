@@ -1,5 +1,6 @@
 let viewer;
-let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTAzLTA0LTIxLTMzLTU3LWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lLmYzZA"
+let doc1;
+let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTAzLTA5LTIwLTAwLTI1LWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lJTIwdjEyLmYzZA"
 
 const options = {
     env: "AutodeskProduction",
@@ -63,8 +64,7 @@ function startViewer(success, fail) {
 }
 
 function loadAnimation(doc, id) {
-    // Create Viewer instance
-    // Create Viewer instance
+
     var viewerDiv = document.getElementById('viewer');
     var config = {
         extensions: ['Autodesk.Fusion360.Animation', 'Autodesk.NPR'],
@@ -103,7 +103,7 @@ function onLoadModelError(viewerErrorCode) {
 function onDocumentLoadSuccess(doc) {
     const defaultModel = doc.getRoot().getDefaultGeometry();
     viewer.loadDocumentNode(doc, defaultModel);
-
+    doc1=doc;
     // let animationsFolder = doc.getRoot().search({ 'type': 'folder', 'role': 'animation' });
     // if (animationsFolder.length == 0) console.error("Модель не содержит анимаций");
     // else loadAnimation(doc, 0);
