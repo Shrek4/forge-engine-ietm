@@ -1,5 +1,7 @@
-let viewer;
-let doc1;
+let viewer; //текущий вьювер
+let doc1; //текущий документ вьювера
+let animationLoaded=false; //загружена ли анимация
+//айди модели из models.autodesk.io
 let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTAzLTA5LTIwLTAwLTI1LWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lJTIwdjEyLmYzZA"
 
 const options = {
@@ -17,7 +19,6 @@ function getForgeToken(onTokenReady) {
 }
 
 Autodesk.Viewing.Initializer(options, function () {
-
     loadModel();
 });
 
@@ -79,8 +80,7 @@ function loadAnimation(doc, id) {
 
     let animationUrl = doc.getViewablePath(animations.children[id]);
 
-
-    viewer.start(animationUrl, {}, onLoadModelSuccess, onLoadModelError);
+    viewer.start(animationUrl, {}, onLoadModelSuccess2, onLoadModelError);
 }
 
 function onLoadModelSuccess(model) {
@@ -95,6 +95,18 @@ function onLoadModelSuccess(model) {
         //checkSeconds();
     });
 }
+function onLoadModelSuccess2(model) {
+
+    viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, (e) => {
+
+    });
+
+    viewer.addEventListener(Autodesk.Viewing.ANIMATION_READY_EVENT, (e) => {
+        animationExt = viewer.getExtension("Autodesk.Fusion360.Animation");
+        animationLoaded=true;
+        animationExt.play();
+    });
+}
 
 function onLoadModelError(viewerErrorCode) {
     console.error("onLoadModelError() - errorCode:" + viewerErrorCode);
@@ -104,9 +116,6 @@ function onDocumentLoadSuccess(doc) {
     const defaultModel = doc.getRoot().getDefaultGeometry();
     viewer.loadDocumentNode(doc, defaultModel);
     doc1=doc;
-    // let animationsFolder = doc.getRoot().search({ 'type': 'folder', 'role': 'animation' });
-    // if (animationsFolder.length == 0) console.error("Модель не содержит анимаций");
-    // else loadAnimation(doc, 0);
 }
 
 function onDocumentLoadFailure() {
@@ -117,7 +126,7 @@ function onViewerClick(){
     if(document.getElementById('partdesc')) {
         let shrek = viewer.getSelection()[0];
         if(shrek) {
-            console.log(shrek);
+            //console.log(shrek);
             showPartDescription(shrek);
         }
     }

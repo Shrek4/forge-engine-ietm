@@ -44,3 +44,21 @@ function selectionPart(){
 function startAnimation(id){
     loadAnimation(doc1, id);
 }
+
+function showAnnotation(){
+    const annotation = document.createElement('div');
+    annotation.id = 'annotation-' + id;
+    annotation.classList.add('annotation', 'hidden');
+    document.querySelector('#viewer').appendChild(annotation);
+    const annotationText = document.createElement('p');
+    annotationText.id = 'annotation-text-' + id;
+    annotationText.innerText = annotations[id].text;
+    annotationText.style.fontSize = "15px";
+    annotation.appendChild(annotationText);
+    const annotationNumber = document.createElement('div');
+    annotationNumber.id = 'annotation-index-' + id;
+    annotationNumber.innerText = + id;
+    annotationNumber.classList.add('annotation-number');
+    annotationNumber.addEventListener('click', () => this.hideAnnotation(id));
+    document.querySelector('#viewer').appendChild(annotationNumber);
+}
