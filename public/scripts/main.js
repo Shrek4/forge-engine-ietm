@@ -44,8 +44,26 @@ function selectionPart(){
 function startAnimation(id){
     loadAnimation(doc1, id);
 }
+let annotations = {};
+function addAnnotation(x, y, z, annotationText, id, flag) {
+    annotations[id] = {
+        x: x,
+        y: y,
+        z: z,
+        text: annotationText
+    }
 
-function showAnnotation(){
+    displayAnnotation(id);
+    setAnotationPosition(id);
+
+    let annotationNumber = document.querySelector("#annotation-index-" + id);
+    annotationNumber.dispatchEvent(new Event("click"));
+    if (!flag) {
+        setAnnotationOpacity(index, 0);
+    }
+}
+
+function displayAnnotation(id) {
     const annotation = document.createElement('div');
     annotation.id = 'annotation-' + id;
     annotation.classList.add('annotation', 'hidden');
@@ -59,6 +77,26 @@ function showAnnotation(){
     annotationNumber.id = 'annotation-index-' + id;
     annotationNumber.innerText = + id;
     annotationNumber.classList.add('annotation-number');
-    annotationNumber.addEventListener('click', () => this.hideAnnotation(id));
+    //annotationNumber.addEventListener('click', () => this.hideAnnotation(id));
     document.querySelector('#viewer').appendChild(annotationNumber);
+}
+
+function setAnotationPosition(id) {
+    let p2 = new THREE.Vector3(annotations[id].x, annotations[id].y, annotations[id].z);
+    if (!viewer.impl.camera.position.equals(p2)) {
+        clientPos = viewer.impl.worldToClient(p2, viewer.impl.camera);
+        p2.x = clientPos.x;
+        p2.y = clientPos.y;
+        document.querySelector('#annotation-' + id).style.left = p2.x + "px";
+        document.querySelector('#annotation-' + id).style.top = p2.y + "px";
+        document.querySelector('#annotation-index-' + id).style.left = p2.x - 15 + "px";
+        document.querySelector('#annotation-index-' + id).style.top = p2.y - 15 + "px";
+    }
+}
+
+function setAnnotationOpacity(id, opacity) {
+    let idStyle = document.querySelector("#annotation-index-" + id).style;
+    let anStyle = document.querySelector('#annotation-' + id).style;
+    idStyle.opacity = opacity;
+    anStyle.opacity = opacity;
 }
