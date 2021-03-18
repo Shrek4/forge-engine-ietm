@@ -44,8 +44,9 @@ function selectionPart(){
 function startAnimation(id){
     loadAnimation(doc1, id);
 }
+
 let annotations = {};
-function addAnnotation(x, y, z, annotationText, id, flag) {
+function addAnnotation(x, y, z, annotationText, id) {
     annotations[id] = {
         x: x,
         y: y,
@@ -58,9 +59,6 @@ function addAnnotation(x, y, z, annotationText, id, flag) {
 
     let annotationNumber = document.querySelector("#annotation-index-" + id);
     annotationNumber.dispatchEvent(new Event("click"));
-    if (!flag) {
-        setAnnotationOpacity(index, 0);
-    }
 }
 
 function displayAnnotation(id) {
@@ -94,9 +92,21 @@ function setAnotationPosition(id) {
     }
 }
 
-function setAnnotationOpacity(id, opacity) {
-    let idStyle = document.querySelector("#annotation-index-" + id).style;
-    let anStyle = document.querySelector('#annotation-' + id).style;
-    idStyle.opacity = opacity;
-    anStyle.opacity = opacity;
+
+document.querySelector("#viewer").addEventListener('mousemove', annotationUpdate(), false);
+
+function annotationUpdate() {
+    for (const id in annotations) {
+        let p2 = new THREE.Vector3(annotations[id].x, annotations[id].y, annotations[id].z);
+        if (!viewer.impl.camera.position.equals(p2)) {
+            clientPos = viewer.impl.worldToClient(p2, viewer.impl.camera);
+            p2.x = clientPos.x;
+            p2.y = clientPos.y;
+            document.querySelector('#annotation-' + id).style.left = p2.x + "px";
+            document.querySelector('#annotation-' + id).style.top = p2.y + "px";
+            document.querySelector('#annotation-index-' + id).style.left = p2.x - 15 + "px";
+            document.querySelector('#annotation-index-' + id).style.top = p2.y - 15 + "px";
+        }
+    }
+console.log("ass")
 }
