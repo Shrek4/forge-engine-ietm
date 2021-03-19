@@ -59,6 +59,7 @@ app.listen(port, () => {
 
 const sqlite3 = require('sqlite3').verbose();
 var parts = "";
+var procedures="";
 // open the database
 let db = new sqlite3.Database('info.db', sqlite3.OPEN_READONLY, (err) => {
     if (err) {
@@ -76,4 +77,15 @@ db.all("SELECT * FROM parts", [], (err, rows) => {
 
 app.get('/parts', function(req, res){
     res.send(parts);
+})
+
+db.all("SELECT * FROM procedures", [], (err, rows) => {
+    if (err) {
+        console.error(err.message);
+    }
+    procedures=rows;
+});
+
+app.get('/procedures', function(req, res){
+    res.send(procedures);
 })

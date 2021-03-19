@@ -21,7 +21,7 @@
 
 <body>
 
-    <div id="viewer" onclick="onViewerClick()">
+    <div id="viewer" onclick="onViewerClick()" onmousemove="annotationUpdate()">
         <img src="../images/forge.png" class="logo">
     </div>
 
@@ -29,21 +29,25 @@
         <div id="mySidenav" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
             <ul>
-                <li><a href="#" onclick="showEngineDescription()">Главная</a></li>
-                <li><a href="#" onclick="selectionPart()">Информация о детали</a></li>
+                <li><a href="#" onclick="showEngineDescription(), closeNav()">Главная</a></li>
+                <li><a href="#" onclick="selectionPart(), closeNav()">Информация о детали</a></li>
                 <li><a href="#">Обслуживание</a></li>
                 <ul>
                     <li><a href="#">Процедуры обслуживания</a></li>
                     <ul class="sublist">
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
+                        <li><a href="#" onclick="closeNav()">1</a></li>
+                        <li><a href="#" onclick="closeNav()">2</a></li>
                     </ul>
-                    <li><a href="#">Инструменты и запасные части</a></li>
+                    <li><a href="#" onclick="closeNav()">Инструменты и запасные части</a></li>
                 </ul>
                 <li><a href="#">Ремонт</a></li>
                 <ul>
                     <li><a href="#">Процедуры ремонта</a></li>
-                    <li><a href="#">Инструменты и запасные части</a></li>
+                    <ul class="sublist">
+                        <li><a href="#" onclick="showProcedureDescription(0), closeNav()">Снятие и установка головки блока цилиндров</a></li>
+                        <li><a href="#"onclick="closeNav()">2</a></li>
+                    </ul>
+                    <li><a href="#" onclick="closeNav()">Инструменты и запасные части</a></li>
                 </ul>
             </ul>
         </div>

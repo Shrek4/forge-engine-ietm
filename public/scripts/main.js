@@ -10,8 +10,8 @@ function closeNav() {
 
 function CallPrint(strid) {
     var prtContent = document.getElementById(strid);
-    var prtCSS = 
-    `<style>
+    var prtCSS =
+        `<style>
     p {
         font-weight: bold;
     }
@@ -34,14 +34,14 @@ function CallPrint(strid) {
     WinPrint.print();
 }
 
-function selectionPart(){
-    document.getElementById('info').innerHTML=`<h1>Информация о детали:</h1>
+function selectionPart() {
+    document.getElementById('info').innerHTML = `<h1>Информация о детали:</h1>
     <div id="partdesc">
         <p>Выберите деталь</p>
     </div>`
 }
 
-function startAnimation(id){
+function startAnimation(id) {
     loadAnimation(doc1, id);
 }
 
@@ -92,7 +92,6 @@ function setAnotationPosition(id) {
     }
 }
 
-
 document.querySelector("#viewer").addEventListener('mousemove', annotationUpdate(), false);
 
 function annotationUpdate() {
@@ -108,5 +107,12 @@ function annotationUpdate() {
             document.querySelector('#annotation-index-' + id).style.top = p2.y - 15 + "px";
         }
     }
-console.log("ass")
+}
+
+function deleteAllAnnotations() {
+    for (const id in annotations) {
+        delete annotations[id];
+        document.querySelector("#annotation-index-" + id).remove();
+        document.querySelector("#annotation-" + id).remove();
+    }
 }
