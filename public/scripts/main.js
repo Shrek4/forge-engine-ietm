@@ -57,8 +57,8 @@ function addAnnotation(x, y, z, annotationText, id) {
     displayAnnotation(id);
     setAnotationPosition(id);
 
-    let annotationNumber = document.querySelector("#annotation-index-" + id);
-    annotationNumber.dispatchEvent(new Event("click"));
+    // let annotationNumber = document.querySelector("#annotation-index-" + id);
+    // annotationNumber.dispatchEvent(new Event("click"));
 }
 
 function displayAnnotation(id) {
@@ -66,17 +66,17 @@ function displayAnnotation(id) {
     annotation.id = 'annotation-' + id;
     annotation.classList.add('annotation', 'hidden');
     document.querySelector('#viewer').appendChild(annotation);
-    const annotationText = document.createElement('p');
-    annotationText.id = 'annotation-text-' + id;
-    annotationText.innerText = annotations[id].text;
-    annotationText.style.fontSize = "15px";
-    annotation.appendChild(annotationText);
-    const annotationNumber = document.createElement('div');
-    annotationNumber.id = 'annotation-index-' + id;
-    annotationNumber.innerText = + id;
-    annotationNumber.classList.add('annotation-number');
-    //annotationNumber.addEventListener('click', () => this.hideAnnotation(id));
-    document.querySelector('#viewer').appendChild(annotationNumber);
+    // const annotationText = document.createElement('p');
+    // annotationText.id = 'annotation-text-' + id;
+    // annotationText.innerText = annotations[id].text;
+    // annotationText.style.fontSize = "15px";
+    // annotation.appendChild(annotationText);
+    // const annotationNumber = document.createElement('div');
+    // annotationNumber.id = 'annotation-index-' + id;
+    // annotationNumber.innerText = + id;
+    // annotationNumber.classList.add('annotation-number');
+    // //annotationNumber.addEventListener('click', () => this.hideAnnotation(id));
+    // document.querySelector('#viewer').appendChild(annotationNumber);
 }
 
 function setAnotationPosition(id) {
@@ -87,8 +87,8 @@ function setAnotationPosition(id) {
         p2.y = clientPos.y;
         document.querySelector('#annotation-' + id).style.left = p2.x + "px";
         document.querySelector('#annotation-' + id).style.top = p2.y + "px";
-        document.querySelector('#annotation-index-' + id).style.left = p2.x - 15 + "px";
-        document.querySelector('#annotation-index-' + id).style.top = p2.y - 15 + "px";
+        // document.querySelector('#annotation-index-' + id).style.left = p2.x - 15 + "px";
+        // document.querySelector('#annotation-index-' + id).style.top = p2.y - 15 + "px";
     }
 }
 
@@ -103,8 +103,8 @@ function annotationUpdate() {
             p2.y = clientPos.y;
             document.querySelector('#annotation-' + id).style.left = p2.x + "px";
             document.querySelector('#annotation-' + id).style.top = p2.y + "px";
-            document.querySelector('#annotation-index-' + id).style.left = p2.x - 15 + "px";
-            document.querySelector('#annotation-index-' + id).style.top = p2.y - 15 + "px";
+            // document.querySelector('#annotation-index-' + id).style.left = p2.x - 15 + "px";
+            // document.querySelector('#annotation-index-' + id).style.top = p2.y - 15 + "px";
         }
     }
 }
@@ -112,7 +112,28 @@ function annotationUpdate() {
 function deleteAllAnnotations() {
     for (const id in annotations) {
         delete annotations[id];
-        document.querySelector("#annotation-index-" + id).remove();
+        // document.querySelector("#annotation-index-" + id).remove();
         document.querySelector("#annotation-" + id).remove();
     }
+}
+
+function getCenterOfNodeId(nodeId) {
+    if (!viewer) {
+        console.error(`Viewer is not initialized`);
+        return;
+    }
+
+    let fragId = viewer.impl.model.getData().fragments.fragId2dbId.indexOf(nodeId);
+    if (fragId == -1) {
+        console.error(`nodeId ${nodeId} not found`);
+        return;
+    }
+
+    let fragProxy = viewer.impl.getFragmentProxy(viewer.impl.model, fragId);
+    fragProxy.getAnimTransform();
+
+    let worldMatrix = new THREE.Matrix4();
+    fragProxy.getWorldMatrix(worldMatrix);
+
+    return worldMatrix.getPosition().clone();
 }
