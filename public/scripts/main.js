@@ -1,3 +1,5 @@
+var annotations = {};
+
 showEngineDescription();
 
 function openNav() {
@@ -45,7 +47,6 @@ function startAnimation(id) {
     loadAnimation(doc1, id);
 }
 
-let annotations = {};
 function addAnnotation(x, y, z, annotationText, id) {
     annotations[id] = {
         x: x,
@@ -66,11 +67,11 @@ function displayAnnotation(id) {
     annotation.id = 'annotation-' + id;
     annotation.classList.add('annotation', 'hidden');
     document.querySelector('#viewer').appendChild(annotation);
-    // const annotationText = document.createElement('p');
-    // annotationText.id = 'annotation-text-' + id;
-    // annotationText.innerText = annotations[id].text;
-    // annotationText.style.fontSize = "15px";
-    // annotation.appendChild(annotationText);
+    const annotationText = document.createElement('p');
+    annotationText.id = 'annotation-text-' + id;
+    annotationText.innerText = annotations[id].text;
+    annotationText.style.fontSize = "15px";
+    annotation.appendChild(annotationText);
     // const annotationNumber = document.createElement('div');
     // annotationNumber.id = 'annotation-index-' + id;
     // annotationNumber.innerText = + id;
@@ -92,8 +93,6 @@ function setAnotationPosition(id) {
     }
 }
 
-document.querySelector("#viewer").addEventListener('mousemove', annotationUpdate(), false);
-
 function annotationUpdate() {
     for (const id in annotations) {
         let p2 = new THREE.Vector3(annotations[id].x, annotations[id].y, annotations[id].z);
@@ -101,8 +100,10 @@ function annotationUpdate() {
             clientPos = viewer.impl.worldToClient(p2, viewer.impl.camera);
             p2.x = clientPos.x;
             p2.y = clientPos.y;
-            document.querySelector('#annotation-' + id).style.left = p2.x + "px";
-            document.querySelector('#annotation-' + id).style.top = p2.y + "px";
+            if (document.querySelector('#annotation-' + id)) {
+                document.querySelector('#annotation-' + id).style.left = p2.x + "px";
+                document.querySelector('#annotation-' + id).style.top = p2.y + "px";
+            }
             // document.querySelector('#annotation-index-' + id).style.left = p2.x - 15 + "px";
             // document.querySelector('#annotation-index-' + id).style.top = p2.y - 15 + "px";
         }
@@ -136,4 +137,13 @@ function getCenterOfNodeId(nodeId) {
     fragProxy.getWorldMatrix(worldMatrix);
 
     return worldMatrix.getPosition().clone();
+}
+
+function hideAnnotation(id) {
+    const annotation = document.querySelector('#annotation-' + id);
+    const hidden = annotation.classList.contains('hidden');
+    document.querySelector('#annotation-text-' + id).innerHTML = hidden ? annotations[id].text : '';
+
+    annotation.classList.add('hidden');
+
 }

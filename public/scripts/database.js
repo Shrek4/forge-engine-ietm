@@ -21,3 +21,9 @@ async function showProcedureDescription(id) {
     $("#info").html(data[id].description);
   });
 }
+
+async function getAnnotations(id) {
+  $.get("http://localhost:3000/procedures", function (data) {
+    annotations=data[id].annotations;
+  });
+}

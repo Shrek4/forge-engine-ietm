@@ -81,6 +81,7 @@ function loadAnimation(doc, id) {
     let animationUrl = doc.getViewablePath(animations.children[id]);
 
     viewer.start(animationUrl, {}, onLoadModelSuccess2, onLoadModelError);
+    
 }
 
 function onLoadModelSuccess(model) {
