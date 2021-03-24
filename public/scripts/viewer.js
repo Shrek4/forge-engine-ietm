@@ -81,7 +81,7 @@ function loadAnimation(doc, id) {
     let animationUrl = doc.getViewablePath(animations.children[id]);
 
     viewer.start(animationUrl, {}, onLoadModelSuccess2, onLoadModelError);
-    
+    getAnnotations(id);
 }
 
 function onLoadModelSuccess(model) {
@@ -106,6 +106,7 @@ function onLoadModelSuccess2(model) {
         animationExt = viewer.getExtension("Autodesk.Fusion360.Animation");
         animationLoaded=true;
         animationExt.play();
+        gaySex();
     });
 }
 

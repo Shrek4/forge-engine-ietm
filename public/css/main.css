@@ -56,6 +56,12 @@ font-weight: bold;
 
 #sidebar {
     padding: 10px;
+    overflow: scroll;
+    overflow-x: hidden;
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
 }
 
 .annotation {
@@ -71,16 +77,3 @@ font-weight: bold;
     opacity: 1;
 }
 
-.annotation-number {
-    z-index: 1;
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    font-size: 16px;
-    line-height: 30px;
-    color: #fff;
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.8);
-}

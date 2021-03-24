@@ -1,4 +1,4 @@
-var annotations = {};
+var annotations;
 
 showEngineDescription();
 
@@ -72,6 +72,7 @@ function displayAnnotation(id) {
     annotationText.innerText = annotations[id].text;
     annotationText.style.fontSize = "15px";
     annotation.appendChild(annotationText);
+    setAnotationPosition(id);
     // const annotationNumber = document.createElement('div');
     // annotationNumber.id = 'annotation-index-' + id;
     // annotationNumber.innerText = + id;
@@ -81,7 +82,8 @@ function displayAnnotation(id) {
 }
 
 function setAnotationPosition(id) {
-    let p2 = new THREE.Vector3(annotations[id].x, annotations[id].y, annotations[id].z);
+    //let p2 = new THREE.Vector3(annotations[id].x, annotations[id].y, annotations[id].z);
+    let p2 = getCenterOfNodeId(annotations[id].nodeid);
     if (!viewer.impl.camera.position.equals(p2)) {
         clientPos = viewer.impl.worldToClient(p2, viewer.impl.camera);
         p2.x = clientPos.x;
@@ -95,7 +97,8 @@ function setAnotationPosition(id) {
 
 function annotationUpdate() {
     for (const id in annotations) {
-        let p2 = new THREE.Vector3(annotations[id].x, annotations[id].y, annotations[id].z);
+        //let p2 = new THREE.Vector3(annotations[id].x, annotations[id].y, annotations[id].z);
+        let p2 = getCenterOfNodeId(annotations[id].nodeid);
         if (!viewer.impl.camera.position.equals(p2)) {
             clientPos = viewer.impl.worldToClient(p2, viewer.impl.camera);
             p2.x = clientPos.x;
@@ -104,8 +107,6 @@ function annotationUpdate() {
                 document.querySelector('#annotation-' + id).style.left = p2.x + "px";
                 document.querySelector('#annotation-' + id).style.top = p2.y + "px";
             }
-            // document.querySelector('#annotation-index-' + id).style.left = p2.x - 15 + "px";
-            // document.querySelector('#annotation-index-' + id).style.top = p2.y - 15 + "px";
         }
     }
 }
@@ -146,4 +147,12 @@ function hideAnnotation(id) {
 
     annotation.classList.add('hidden');
 
+}
+var kek = setInterval(gaySex, 1000);
+function gaySex() {
+    animExt = viewer.getExtension("Autodesk.Fusion360.Animation");
+    if (animExt.isPlaying()) {
+        console.log("shrek")
+    }
+    else clearInterval(kek);
 }
