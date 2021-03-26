@@ -1,6 +1,7 @@
 let viewer; //текущий вьювер
 let doc1; //текущий документ вьювера
 let animationLoaded=false; //загружена ли анимация
+let currentAnimId; //текущий айди анимации
 //айди модели из models.autodesk.io
 let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTAzLTA5LTIwLTAwLTI1LWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lJTIwdjEyLmYzZA"
 
@@ -81,6 +82,7 @@ function loadAnimation(doc, id) {
     let animationUrl = doc.getViewablePath(animations.children[id]);
 
     viewer.start(animationUrl, {}, onLoadModelSuccess2, onLoadModelError);
+    currentAnimId=id;
     getAnnotations(id);
 }
 
@@ -106,7 +108,6 @@ function onLoadModelSuccess2(model) {
         animationExt = viewer.getExtension("Autodesk.Fusion360.Animation");
         animationLoaded=true;
         animationExt.play();
-        gaySex();
     });
 }
 

@@ -1,4 +1,4 @@
-var annotations;
+var annotations = {};
 
 showEngineDescription();
 
@@ -47,13 +47,8 @@ function startAnimation(id) {
     loadAnimation(doc1, id);
 }
 
-function addAnnotation(x, y, z, annotationText, id) {
-    annotations[id] = {
-        x: x,
-        y: y,
-        z: z,
-        text: annotationText
-    }
+function addAnnotation(id, nodeid, start, end, text) {
+    annotations[id] = { nodeid: nodeid, start: start, end: end, text: text }
 
     displayAnnotation(id);
     setAnotationPosition(id);
@@ -63,22 +58,17 @@ function addAnnotation(x, y, z, annotationText, id) {
 }
 
 function displayAnnotation(id) {
-    const annotation = document.createElement('div');
-    annotation.id = 'annotation-' + id;
-    annotation.classList.add('annotation', 'hidden');
-    document.querySelector('#viewer').appendChild(annotation);
-    const annotationText = document.createElement('p');
-    annotationText.id = 'annotation-text-' + id;
-    annotationText.innerText = annotations[id].text;
-    annotationText.style.fontSize = "15px";
-    annotation.appendChild(annotationText);
-    setAnotationPosition(id);
-    // const annotationNumber = document.createElement('div');
-    // annotationNumber.id = 'annotation-index-' + id;
-    // annotationNumber.innerText = + id;
-    // annotationNumber.classList.add('annotation-number');
-    // //annotationNumber.addEventListener('click', () => this.hideAnnotation(id));
-    // document.querySelector('#viewer').appendChild(annotationNumber);
+    if (!document.querySelector('#annotation-' + id)) {
+        const annotation = document.createElement('div');
+        annotation.id = 'annotation-' + id;
+        annotation.classList.add('annotation');
+        document.querySelector('#viewer').appendChild(annotation);
+        const annotationText = document.createElement('p');
+        annotationText.innerText = annotations[id].text;
+        annotationText.style.fontSize = "15px";
+        annotation.appendChild(annotationText);
+        setAnotationPosition(id);
+    }
 }
 
 function setAnotationPosition(id) {
@@ -90,8 +80,6 @@ function setAnotationPosition(id) {
         p2.y = clientPos.y;
         document.querySelector('#annotation-' + id).style.left = p2.x + "px";
         document.querySelector('#annotation-' + id).style.top = p2.y + "px";
-        // document.querySelector('#annotation-index-' + id).style.left = p2.x - 15 + "px";
-        // document.querySelector('#annotation-index-' + id).style.top = p2.y - 15 + "px";
     }
 }
 
@@ -114,7 +102,6 @@ function annotationUpdate() {
 function deleteAllAnnotations() {
     for (const id in annotations) {
         delete annotations[id];
-        // document.querySelector("#annotation-index-" + id).remove();
         document.querySelector("#annotation-" + id).remove();
     }
 }
@@ -141,18 +128,23 @@ function getCenterOfNodeId(nodeId) {
 }
 
 function hideAnnotation(id) {
-    const annotation = document.querySelector('#annotation-' + id);
-    const hidden = annotation.classList.contains('hidden');
-    document.querySelector('#annotation-text-' + id).innerHTML = hidden ? annotations[id].text : '';
-
-    annotation.classList.add('hidden');
-
+    if (document.querySelector('#annotation-' + id)) $('#annotation-' + id).remove();
 }
-var kek = setInterval(gaySex, 1000);
-function gaySex() {
-    animExt = viewer.getExtension("Autodesk.Fusion360.Animation");
-    if (animExt.isPlaying()) {
-        console.log("shrek")
+
+var kek = setInterval(animTick, 100);
+function animTick() {
+    if (animationLoaded) {
+        let animExt = viewer.getExtension("Autodesk.Fusion360.Animation");
+
+        let start = annotations[currentAnimId].start; //начало аннотации в процентах
+        let end = annotations[currentAnimId].end; //конец аннотации в процентах
+        let progress = Math.floor(animExt.getCurrentTime() / animExt.getDuration() * 100); //прогресс в процентах
+        if (progress == start) displayAnnotation(currentAnimId);
+        if (progress == end) hideAnnotation(currentAnimId);
+        if (animExt.isPlaying()) {
+
+            //console.log(progress);
+            annotationUpdate();
+        }
     }
-    else clearInterval(kek);
 }

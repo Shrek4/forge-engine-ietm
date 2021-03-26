@@ -67,8 +67,6 @@ font-weight: bold;
 .annotation {
     position: absolute;
     z-index: 1;
-    margin-left: 15px;
-    margin-top: 15px;
     padding: 8px;
     color: #fff;
     border-radius: 0.5em;
@@ -77,3 +75,8 @@ font-weight: bold;
     opacity: 1;
 }
 
+.hidden {
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+}
