@@ -131,16 +131,32 @@ function hideAnnotation(id) {
     if (document.querySelector('#annotation-' + id)) $('#annotation-' + id).remove();
 }
 
+function viewerMouseMove() {
+    if (animationLoaded) {
+        let animExt = viewer.getExtension("Autodesk.Fusion360.Animation");
+        if (!animExt.isPlaying()) annotationUpdate();
+    }
+
+}
+
 var kek = setInterval(animTick, 100);
 function animTick() {
     if (animationLoaded) {
         let animExt = viewer.getExtension("Autodesk.Fusion360.Animation");
 
-        let start = annotations[currentAnimId].start; //начало аннотации в процентах
-        let end = annotations[currentAnimId].end; //конец аннотации в процентах
+
         let progress = Math.floor(animExt.getCurrentTime() / animExt.getDuration() * 100); //прогресс в процентах
-        if (progress == start) displayAnnotation(currentAnimId);
-        if (progress == end) hideAnnotation(currentAnimId);
+
+        annotations.forEach(element => {
+            let start = annotations[annotations.indexOf(element)].start; //начало аннотации в процентах
+            let end = annotations[annotations.indexOf(element)].end; //конец аннотации в процентах
+            if ((progress >= start) && (progress < end)) {
+                displayAnnotation(annotations.indexOf(element));
+                viewer.select(element.nodeid);
+            }
+            if ((progress < start) || (progress >= end)) hideAnnotation(annotations.indexOf(element));
+        });
+
         if (animExt.isPlaying()) {
 
             //console.log(progress);
@@ -148,3 +164,4 @@ function animTick() {
         }
     }
 }
+
