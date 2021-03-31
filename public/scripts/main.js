@@ -73,7 +73,7 @@ function displayAnnotation(id) {
 
 function setAnotationPosition(id) {
     //let p2 = new THREE.Vector3(annotations[id].x, annotations[id].y, annotations[id].z);
-    let p2 = getCenterOfNodeId(annotations[id].nodeid);
+    let p2 = getCenterOfNode(annotations[id].nodeid);
     if (!viewer.impl.camera.position.equals(p2)) {
         clientPos = viewer.impl.worldToClient(p2, viewer.impl.camera);
         p2.x = clientPos.x;
@@ -86,7 +86,7 @@ function setAnotationPosition(id) {
 function annotationUpdate() {
     for (const id in annotations) {
         //let p2 = new THREE.Vector3(annotations[id].x, annotations[id].y, annotations[id].z);
-        let p2 = getCenterOfNodeId(annotations[id].nodeid);
+        let p2 = getCenterOfNode(annotations[id].nodeid);
         if (!viewer.impl.camera.position.equals(p2)) {
             clientPos = viewer.impl.worldToClient(p2, viewer.impl.camera);
             p2.x = clientPos.x;
@@ -106,7 +106,7 @@ function deleteAllAnnotations() {
     }
 }
 
-function getCenterOfNodeId(nodeId) {
+function getCenterOfNode(nodeId) {
     if (!viewer) {
         console.error(`Viewer is not initialized`);
         return;
@@ -124,7 +124,10 @@ function getCenterOfNodeId(nodeId) {
     let worldMatrix = new THREE.Matrix4();
     fragProxy.getWorldMatrix(worldMatrix);
 
-    return worldMatrix.getPosition().clone();
+    var position = new THREE.Vector3();
+    position.setFromMatrixPosition(worldMatrix);
+
+    return position.clone();
 }
 
 function hideAnnotation(id) {
@@ -153,8 +156,15 @@ function animTick() {
             if ((progress >= start) && (progress < end)) {
                 displayAnnotation(annotations.indexOf(element));
                 viewer.select(element.nodeid);
+                $('#point-' + (annotations.indexOf(element) + 1)).css("color", "white");
+                $('#point-' + (annotations.indexOf(element) + 1)).css("background-color", "darkslategray");
             }
-            if ((progress < start) || (progress >= end)) hideAnnotation(annotations.indexOf(element));
+            if ((progress < start) || (progress >= end)) {
+                hideAnnotation(annotations.indexOf(element));
+                viewer.clearSelection();
+                $('#point-' + (annotations.indexOf(element) + 1)).css("color", "black");
+                $('#point-' + (annotations.indexOf(element) + 1)).css("background-color", "transparent");
+            }
         });
 
         if (animExt.isPlaying()) {
