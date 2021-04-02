@@ -16,14 +16,22 @@ async function showProcedureDescription(id) {
   });
 }
 
-async function showProcedureDescription(id) {
+async function getAnnotations(id) {
   $.get("http://localhost:3000/procedures", function (data) {
-    $("#info").html(data[id].description);
+    annotations = JSON.parse(data[id].annotations);
   });
 }
 
-async function getAnnotations(id) {
+async function showProcedureDescription(id) {
   $.get("http://localhost:3000/procedures", function (data) {
-    annotations=JSON.parse(data[id].annotations);
+    stages = JSON.parse(data[id].stages);
+    let desc = `<h2>` + data[id].proc_name + `</h2>
+<button onclick="startAnimation(`+ id + `)">Запустить анимацию</button>
+<p></p>`;
+    for (let i = 0; i < stages.length; i++) {
+      desc += `<h3 id="stage-` + i + `">` + stages[i].title + `</h3>` +
+        `<p>` + stages[i].description + `</p>`;
+    }
+    $("#info").html(desc);
   });
 }

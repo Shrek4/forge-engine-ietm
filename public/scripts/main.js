@@ -1,4 +1,5 @@
 var annotations = {};
+var stages = {};
 
 showEngineDescription();
 
@@ -156,20 +157,30 @@ function animTick() {
             if ((progress >= start) && (progress < end)) {
                 displayAnnotation(annotations.indexOf(element));
                 viewer.select(element.nodeid);
-                $('#point-' + (annotations.indexOf(element) + 1)).css("color", "white");
-                $('#point-' + (annotations.indexOf(element) + 1)).css("background-color", "darkslategray");
             }
             if ((progress < start) || (progress >= end)) {
                 hideAnnotation(annotations.indexOf(element));
                 viewer.clearSelection();
-                $('#point-' + (annotations.indexOf(element) + 1)).css("color", "black");
-                $('#point-' + (annotations.indexOf(element) + 1)).css("background-color", "transparent");
+            }
+        });
+
+        stages.forEach(element => {
+            let start;
+            if(stages.indexOf(element)==0) start=1; else start=stages[stages.indexOf(element)].start;
+            let end;
+            if(stages.indexOf(element)==stages.length-1) end=100; else end=stages[stages.indexOf(element)+1].start;
+            
+            if ((progress >= start) && (progress < end)) {
+                $('#stage-' + stages.indexOf(element)).css("color", "white");
+                $('#stage-' + stages.indexOf(element)).css("background-color", "darkslategray");
+            }
+            if ((progress < start) || (progress >= end)) {
+                $('#stage-' + stages.indexOf(element)).css("color", "black");
+                $('#stage-' + stages.indexOf(element)).css("background-color", "transparent");
             }
         });
 
         if (animExt.isPlaying()) {
-
-            //console.log(progress);
             annotationUpdate();
         }
     }
