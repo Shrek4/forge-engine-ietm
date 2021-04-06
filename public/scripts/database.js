@@ -10,12 +10,6 @@ async function showEngineDescription() {
   });
 }
 
-async function showProcedureDescription(id) {
-  $.get("http://localhost:3000/procedures", function (data) {
-    $("#info").html(data[id].description);
-  });
-}
-
 async function getAnnotations(id) {
   $.get("http://localhost:3000/procedures", function (data) {
     annotations = JSON.parse(data[id].annotations);
@@ -33,5 +27,24 @@ async function showProcedureDescription(id) {
         `<p>` + stages[i].description + `</p>`;
     }
     $("#info").html(desc);
+  });
+}
+
+async function showContents() {
+  $.get("http://localhost:3000/components", function (data) {
+    let contentstable = `<table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Компонент</th>
+        <th scope="col">Описание</th>
+      </tr>
+    </thead>
+    <tbody>`;
+
+    
+
+    contentstable += "</tbody></table>"
+
+    $("#info").html(contentstable);
   });
 }

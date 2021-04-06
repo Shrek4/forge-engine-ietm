@@ -80,3 +80,7 @@ font-weight: bold;
     margin: 0;
     padding: 0;
 }
+
+td:first-child{
+    width: 30%;
+}
