@@ -3,7 +3,7 @@ let doc1; //текущий документ вьювера
 let animationLoaded=false; //загружена ли анимация
 let currentAnimId; //текущий айди анимации
 //айди модели из models.autodesk.io
-let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTAzLTA5LTIwLTAwLTI1LWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lJTIwdjEyLmYzZA"
+let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTA0LTA3LTIxLTExLTIzLWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lJTIwbSUyMHYzMy5mM2Q"
 
 const options = {
     env: "AutodeskProduction",
