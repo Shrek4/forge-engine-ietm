@@ -7,13 +7,13 @@ async function showPartDescription(id) {
       if (animationLoaded) {
         if (nodeid.indexOf(id) != -1) {
           viewer.select(nodeid);
-          $("#partdesc").html(data[i-1].description);
+          $("#partdesc").html("<h2>"+data[i-1].name+"</h2>"+data[i-1].description);
         }
       }
       else {
         if (nodeid.indexOf(id) != -1) {
           viewer.select(nodeid);
-          $("#partdesc").html(data[i].description);
+          $("#partdesc").html("<h2>"+data[i].name+"</h2>"+data[i].description);
         }
       }
     }

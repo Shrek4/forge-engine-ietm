@@ -84,3 +84,9 @@ font-weight: bold;
 td:first-child{
     width: 30%;
 }
+
+table a{
+    text-decoration: underline;
+    color: black;
+    font-weight: bold;
+}

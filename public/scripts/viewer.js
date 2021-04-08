@@ -3,7 +3,7 @@ let doc1; //текущий документ вьювера
 let animationLoaded=false; //загружена ли анимация
 let currentAnimId; //текущий айди анимации
 //айди модели из models.autodesk.io
-let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTA0LTA3LTIxLTExLTIzLWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lJTIwbSUyMHYzMy5mM2Q"
+let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTA0LTA4LTE3LTA0LTExLWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lJTIwbSUyMHYzNC5mM2Q"
 
 const options = {
     env: "AutodeskProduction",
@@ -129,7 +129,7 @@ function onViewerClick(){
     if(document.getElementById('partdesc')) {
         let shrek = viewer.getSelection()[0];
         if(shrek) {
-            console.log(shrek);
+            console.log(viewer.getSelection());
             showPartDescription(shrek);
         }
     }
