@@ -20,7 +20,6 @@
     transition: 0.3s;
 }
 
-
 .sidenav a:hover {
     color: #f1f1f1;
 }
@@ -46,4 +45,10 @@
 .sublist a{
     font-size: 18px;
     padding: 4px;
+}
+
+table a{
+    text-decoration: underline;
+    color: black;
+    font-weight: bold;
 }

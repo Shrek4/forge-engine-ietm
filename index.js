@@ -68,14 +68,14 @@ let db = new sqlite3.Database('info.db', sqlite3.OPEN_READONLY, (err) => {
     console.log('Connected to the database.');
 });
 
-db.all("SELECT * FROM parts", [], (err, rows) => {
+db.all("SELECT * FROM components", [], (err, rows) => {
     if (err) {
         console.error(err.message);
     }
     parts=rows;
 });
 
-app.get('/parts', function(req, res){
+app.get('/components', function(req, res){
     res.send(parts);
 })
 
