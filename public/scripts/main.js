@@ -1,10 +1,12 @@
 var annotations = {};
 var stages = {};
+var tick;
 
 showEngineDescription();
+getProcedures();
 
 function openNav() {
-    document.getElementById("mySidenav").style.width = "300px";
+    document.getElementById("mySidenav").style.width = "350px";
 }
 
 function closeNav() {
@@ -40,22 +42,14 @@ function CallPrint(strid) {
 function selectionPart() {
     document.getElementById('info').innerHTML = `<h1>Информация о детали:</h1>
     <div id="partdesc">
-        <p>Выберите деталь</p>
+        <p>Выберите деталь на модели</p>
     </div>`
+    if(animationLoaded) stopAnimation();
 }
 
 function startAnimation(id) {
     loadAnimation(doc1, id);
-}
-
-function addAnnotation(id, nodeid, start, end, text) {
-    annotations[id] = { nodeid: nodeid, start: start, end: end, text: text }
-
-    displayAnnotation(id);
-    setAnotationPosition(id);
-
-    // let annotationNumber = document.querySelector("#annotation-index-" + id);
-    // annotationNumber.dispatchEvent(new Event("click"));
+    tick = setInterval(animTick, 100);
 }
 
 function displayAnnotation(id) {
@@ -143,7 +137,6 @@ function viewerMouseMove() {
 
 }
 
-var kek = setInterval(animTick, 100);
 function animTick() {
     if (animationLoaded) {
         let animExt = viewer.getExtension("Autodesk.Fusion360.Animation");
@@ -156,29 +149,29 @@ function animTick() {
             let end = annotations[annotations.indexOf(element)].end; //конец аннотации в процентах
             if ((progress >= start) && (progress < end)) {
                 displayAnnotation(annotations.indexOf(element));
-                viewer.select(element.nodeid);
+                //viewer.select(element.nodeid);
             }
             if ((progress < start) || (progress >= end)) {
                 hideAnnotation(annotations.indexOf(element));
-                viewer.clearSelection();
+                //viewer.clearSelection();
             }
         });
 
-        stages.forEach(element => {
-            let start;
-            if(stages.indexOf(element)==0) start=1; else start=stages[stages.indexOf(element)].start;
-            let end;
-            if(stages.indexOf(element)==stages.length-1) end=100; else end=stages[stages.indexOf(element)+1].start;
+        // stages.forEach(element => {
+        //     let start;
+        //     if(stages.indexOf(element)==0) start=1; else start=stages[stages.indexOf(element)].start;
+        //     let end;
+        //     if(stages.indexOf(element)==stages.length-1) end=100; else end=stages[stages.indexOf(element)+1].start;
             
-            if ((progress >= start) && (progress < end)) {
-                $('#stage-' + stages.indexOf(element)).css("color", "white");
-                $('#stage-' + stages.indexOf(element)).css("background-color", "darkslategray");
-            }
-            if ((progress < start) || (progress >= end)) {
-                $('#stage-' + stages.indexOf(element)).css("color", "black");
-                $('#stage-' + stages.indexOf(element)).css("background-color", "transparent");
-            }
-        });
+        //     if ((progress >= start) && (progress < end)) {
+        //         $('#stage-' + stages.indexOf(element)).css("color", "white");
+        //         $('#stage-' + stages.indexOf(element)).css("background-color", "darkslategray");
+        //     }
+        //     if ((progress < start) || (progress >= end)) {
+        //         $('#stage-' + stages.indexOf(element)).css("color", "black");
+        //         $('#stage-' + stages.indexOf(element)).css("background-color", "transparent");
+        //     }
+        // });
 
         if (animExt.isPlaying()) {
             annotationUpdate();
@@ -186,3 +179,8 @@ function animTick() {
     }
 }
 
+function stopAnimation(){
+    clearInterval(tick);
+    loadModel();
+    animationLoaded=false;
+}
