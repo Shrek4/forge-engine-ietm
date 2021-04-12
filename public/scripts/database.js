@@ -87,7 +87,7 @@ function sortComponents(data) {
     return newdata;
 }
 
-async function getProcedures() {
+async function showProcedures() {
     $.get("http://localhost:3000/procedures", function (data) {
         let mn = ``;
         let rep = ``;
@@ -97,5 +97,17 @@ async function getProcedures() {
         }
         $("#maintenance").html(mn);
         $("#repair").html(rep);
+    });
+}
+
+async function showRequirements() {
+    $.get("http://localhost:3000/other", function (data) {
+        $("#info").html(data[0].description);
+    });
+}
+
+async function showDiagnostic() {
+    $.get("http://localhost:3000/other", function (data) {
+        $("#info").html(data[1].description);
     });
 }

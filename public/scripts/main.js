@@ -3,7 +3,7 @@ var stages = {};
 var tick;
 
 showEngineDescription();
-getProcedures();
+showProcedures();
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "350px";
@@ -36,7 +36,12 @@ function CallPrint(strid) {
     WinPrint.document.write('</body>');
     WinPrint.document.close();
     WinPrint.focus();
-    WinPrint.print();
+    WinPrint.onload = () => {
+        WinPrint.print();
+    }
+    WinPrint.onafterprint = () => {
+        WinPrint.close();
+    }
 }
 
 function selectionPart() {
@@ -44,7 +49,7 @@ function selectionPart() {
     <div id="partdesc">
         <p>Выберите деталь на модели</p>
     </div>`
-    if(animationLoaded) stopAnimation();
+    if (animationLoaded) stopAnimation();
 }
 
 function startAnimation(id) {
@@ -162,7 +167,7 @@ function animTick() {
         //     if(stages.indexOf(element)==0) start=1; else start=stages[stages.indexOf(element)].start;
         //     let end;
         //     if(stages.indexOf(element)==stages.length-1) end=100; else end=stages[stages.indexOf(element)+1].start;
-            
+
         //     if ((progress >= start) && (progress < end)) {
         //         $('#stage-' + stages.indexOf(element)).css("color", "white");
         //         $('#stage-' + stages.indexOf(element)).css("background-color", "darkslategray");
@@ -179,8 +184,8 @@ function animTick() {
     }
 }
 
-function stopAnimation(){
+function stopAnimation() {
     clearInterval(tick);
     loadModel();
-    animationLoaded=false;
+    animationLoaded = false;
 }
