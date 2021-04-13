@@ -1,6 +1,6 @@
 var annotations = {};
 var stages = {};
-var tick;
+var timer;
 
 showEngineDescription();
 showProcedures();
@@ -54,7 +54,7 @@ function selectionPart() {
 
 function startAnimation(id) {
     loadAnimation(doc1, id);
-    tick = setInterval(animTick, 100);
+    timer = setInterval(animTick, 100);
 }
 
 function displayAnnotation(id) {
@@ -185,7 +185,7 @@ function animTick() {
 }
 
 function stopAnimation() {
-    clearInterval(tick);
+    clearInterval(timer);
     loadModel();
     animationLoaded = false;
 }
