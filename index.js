@@ -101,3 +101,12 @@ db.all("SELECT * FROM other", [], (err, rows) => {
         res.send(rows);
     })
 });
+
+function addComment(name, text){
+    db.run('INSERT INTO comments(name, text) VALUES('+name+', '+text+')', ['C'], (err) => {
+        if(err) {
+            return console.log(err.message); 
+        }
+        console.log('Row was added to the table: ${this.lastID}');
+    })
+}

@@ -3,7 +3,8 @@ let doc1; //текущий документ вьювера
 let animationLoaded=false; //загружена ли анимация
 let currentAnimId; //текущий айди анимации
 //айди модели из models.autodesk.io
-let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTA0LTExLTE5LTMxLTE1LWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lJTIwbSUyMHYzOC5mM2Q"
+let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTA0LTE4LTE0LTQ2LTI3LWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lJTIwbSUyMHY0My5mM2Q";
+let FORGE_MODEL_URN2 = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTA0LTE4LTE0LTUzLTUyLWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lJTIwYW5pbWF0YWJsZSUyMHY2LmYzZA";
 
 const options = {
     env: "AutodeskProduction",
@@ -48,19 +49,6 @@ function loadModel() {
         onDocumentLoadSuccess,
         onDocumentLoadFailure
     );
-}
-
-function stopViewer() {
-    viewer.finish();
-    viewer = null;
-    document.getElementById("viewer").innerHTML = "";
-}
-
-function startViewer(success, fail) {
-    Autodesk.Viewing.Initializer(options, function onInitialized() {
-        // Загрузка документа CAD модели
-        Autodesk.Viewing.Document.load(FORGE_MODEL_URN, success, fail);
-    });
 }
 
 function loadAnimation(doc, id) {
