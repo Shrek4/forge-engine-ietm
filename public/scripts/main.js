@@ -67,11 +67,11 @@ function displayAnnotation(id) {
         annotationText.innerText = annotations[id].text;
         annotationText.style.fontSize = "15px";
         annotation.appendChild(annotationText);
-        setAnotationPosition(id);
+        setAnnotationPosition(id);
     }
 }
 
-function setAnotationPosition(id) {
+function setAnnotationPosition(id) {
     //let p2 = new THREE.Vector3(annotations[id].x, annotations[id].y, annotations[id].z);
     let p2 = getCenterOfNode(annotations[id].nodeid);
     if (!viewer.impl.camera.position.equals(p2)) {
@@ -189,3 +189,7 @@ function stopAnimation() {
     loadModel();
     animationLoaded = false;
 }
+
+// let b_canvas = document.getElementById("canv");
+// var b_context = b_canvas.getContext("2d");
+// b_context.fillRect(50, 25, 150, 100);
