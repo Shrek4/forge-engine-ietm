@@ -72,7 +72,6 @@ function displayAnnotation(id) {
 }
 
 function setAnnotationPosition(id) {
-    //let p2 = new THREE.Vector3(annotations[id].x, annotations[id].y, annotations[id].z);
     let p2 = getCenterOfNode(annotations[id].nodeid);
     if (!viewer.impl.camera.position.equals(p2)) {
         clientPos = viewer.impl.worldToClient(p2, viewer.impl.camera);
@@ -85,13 +84,13 @@ function setAnnotationPosition(id) {
 
 function annotationUpdate() {
     for (const id in annotations) {
-        //let p2 = new THREE.Vector3(annotations[id].x, annotations[id].y, annotations[id].z);
         let p2 = getCenterOfNode(annotations[id].nodeid);
         if (!viewer.impl.camera.position.equals(p2)) {
-            clientPos = viewer.impl.worldToClient(p2, viewer.impl.camera);
+            clientPos = viewer.impl.worldToClient(p2, viewer.impl.camera); //рассчитывает проекцию точки на плоскость экрана
             p2.x = clientPos.x;
             p2.y = clientPos.y;
             if (document.querySelector('#annotation-' + id)) {
+                if(p2.x>$('#viewer').width()/2) console.log($('#viewer').width());
                 document.querySelector('#annotation-' + id).style.left = p2.x + "px";
                 document.querySelector('#annotation-' + id).style.top = p2.y + "px";
             }
@@ -162,22 +161,6 @@ function animTick() {
             }
         });
 
-        // stages.forEach(element => {
-        //     let start;
-        //     if(stages.indexOf(element)==0) start=1; else start=stages[stages.indexOf(element)].start;
-        //     let end;
-        //     if(stages.indexOf(element)==stages.length-1) end=100; else end=stages[stages.indexOf(element)+1].start;
-
-        //     if ((progress >= start) && (progress < end)) {
-        //         $('#stage-' + stages.indexOf(element)).css("color", "white");
-        //         $('#stage-' + stages.indexOf(element)).css("background-color", "darkslategray");
-        //     }
-        //     if ((progress < start) || (progress >= end)) {
-        //         $('#stage-' + stages.indexOf(element)).css("color", "black");
-        //         $('#stage-' + stages.indexOf(element)).css("background-color", "transparent");
-        //     }
-        // });
-
         if (animExt.isPlaying()) {
             annotationUpdate();
         }
@@ -190,6 +173,32 @@ function stopAnimation() {
     animationLoaded = false;
 }
 
-// let b_canvas = document.getElementById("canv");
-// var b_context = b_canvas.getContext("2d");
-// b_context.fillRect(50, 25, 150, 100);
+function drawLine(point1, point2) {
+    const geometry = new THREE.Geometry()
+
+    // geometry.vertices.push (new THREE.Vector3 ( 0,  0,  0))
+    // geometry.vertices.push (new THREE.Vector3 (1000, 1000, 1000))
+    geometry.vertices.push(point1);
+    geometry.vertices.push(point2);
+
+    var linesMaterial = new THREE.LineBasicMaterial({
+        color: new THREE.Color(0xFF0000),
+        transparent: true,
+        depthWrite: false,
+        depthTest: true,
+        linewidth: 10,
+        opacity: 1.0
+    });
+
+    var lines = new THREE.Line(geometry,
+        linesMaterial,
+        THREE.LinePieces);
+
+    viewer.impl.createOverlayScene(
+        'myOverlay', linesMaterial);
+
+    viewer.impl.addOverlay(
+        'myOverlay', lines);
+
+    viewer.impl.invalidate(true);
+}

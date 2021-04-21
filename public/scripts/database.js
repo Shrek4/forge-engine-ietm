@@ -1,7 +1,5 @@
 async function showPartDescription(id) {
     $.get("http://localhost:3000/components", function (data) {
-        //if (animationLoaded) $("#partdesc").html(data[id - 1].description); else $("#partdesc").html(data[id].description);
-
         for (let i = 0; i < data.length; i++) { //поиск элемента, содержащего айди
             let nodeid = JSON.parse(data[i].node_ids);
             if (nodeid.indexOf(id) != -1) {
@@ -27,15 +25,6 @@ async function getAnnotations(id) {
 
 async function showProcedureDescription(id) {
     $.get("http://localhost:3000/procedures", function (data) {
-        //         stages = JSON.parse(data[id].stages);
-        //         let desc = `<h2>` + data[id].proc_name + `</h2>
-        // <button onclick="startAnimation(` + id + `)">Запустить анимацию</button>
-        // <p></p>`;
-        //         for (let i = 0; i < stages.length; i++) {
-        //             desc += `<h3 id="stage-` + i + `">` + stages[i].title + `</h3>` +
-        //                 `<p>` + stages[i].description + `</p>`;
-        //         }
-        //         $("#info").html(desc);
         $("#info").html(data[id].description);
     });
 }
