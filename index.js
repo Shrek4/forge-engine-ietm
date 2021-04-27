@@ -1,8 +1,8 @@
 const express = require('express')
 const Axios = require('axios');
 const bodyParser = require('body-parser');
-const FORGE_CLIENT_ID = "A90ZYBE6V9tKBKoH3dXrUE9waQGcdFF0";
-const FORGE_CLIENT_SECRET = "EIIW4U9y8svJh96j";
+const FORGE_CLIENT_ID = "7TQxVjm16exkmJcwsFmkaJe5bwa9uewI";
+const FORGE_CLIENT_SECRET = "EDnxgAsO6jxL4rRc";
 
 const app = express();
 app.use(bodyParser.json());

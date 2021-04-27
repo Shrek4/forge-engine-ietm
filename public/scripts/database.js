@@ -151,10 +151,10 @@ async function showComments(id) {
         else comments += `</div>`
 
         comments += `<form>
-        <label for="name">Ваше имя:</label>
+        <label for="name">Ваше имя:</label><br>
         <input type="text" id="inputname" required><br>
-        <label for="text">Сообщение:</label>
-        <textarea maxlength="100" id="inputtext" required></textarea><br>
+        <label for="text">Сообщение:</label><br>
+        <textarea cols="50" id="inputtext" required></textarea><br>
         <input type="submit" value="Оставить комментарий" id="commentsubmit">
         </form>`
 
