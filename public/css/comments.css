@@ -1,0 +1,23 @@
+.media-body .author {
+    display: block;
+    font-size: 1rem;
+    color: #000;
+    font-weight: 700;
+  }
+  .media-body .metadata {
+    display: block;
+    color: #777;
+    font-size: .8125rem;
+  }
+  .media-text {
+    margin-bottom: 0.25rem;
+  }
+  .title-comments {
+    font-size: 1.4rem;
+    font-weight: bold;
+    line-height: 1.5rem;
+    color: rgba(0,0,0,.87);
+    margin-bottom: 1rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid rgba(34,36,38,.15); 
+  }

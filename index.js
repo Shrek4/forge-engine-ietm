@@ -58,12 +58,9 @@ app.listen(port, () => {
 });
 
 const sqlite3 = require('sqlite3').verbose();
-var parts = "";
-var procedures = "";
-var others = "";
-var tools = "";
+
 // open the database
-let db = new sqlite3.Database('info.db', sqlite3.OPEN_READONLY, (err) => {
+let db = new sqlite3.Database('info.db', (err) => {
     if (err) {
         console.error(err.message);
     }
@@ -74,24 +71,19 @@ db.all("SELECT * FROM components", [], (err, rows) => {
     if (err) {
         console.error(err.message);
     }
-    parts = rows;
+    app.get('/components', function (req, res) {
+        res.send(rows);
+    })
 });
-
-app.get('/components', function (req, res) {
-    res.send(parts);
-})
 
 db.all("SELECT * FROM procedures", [], (err, rows) => {
     if (err) {
         console.error(err.message);
     }
-    procedures = rows;
+    app.get('/procedures', function (req, res) {
+        res.send(rows);
+    })
 });
-
-app.get('/procedures', function (req, res) {
-    res.send(procedures);
-})
-
 
 db.all("SELECT * FROM other", [], (err, rows) => {
     if (err) {
@@ -102,11 +94,22 @@ db.all("SELECT * FROM other", [], (err, rows) => {
     })
 });
 
-function addComment(name, text){
-    db.run('INSERT INTO comments(name, text) VALUES('+name+', '+text+')', ['C'], (err) => {
+
+db.all("SELECT * FROM comments", [], (err, rows) => {
+    if (err) {
+        console.error(err.message);
+    }
+    app.get('/comments', function (req, res) {
+        res.send(rows);
+    })
+});
+
+app.post('/addComment', function(req,res){
+    db.run('INSERT INTO comments (name, text, procedure_id, date) VALUES (?, ?, ?, ?)', [req.body.name, req.body.text, req.body.procedure_id, req.body.date], (err) => {
+        console.log(req)
         if(err) {
             return console.log(err.message); 
         }
-        console.log('Row was added to the table: ${this.lastID}');
+        console.log(`Row was added to the table "comments": `+JSON.stringify(req.body));
     })
-}
+})

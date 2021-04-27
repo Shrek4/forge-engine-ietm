@@ -68,6 +68,7 @@ function displayAnnotation(id) {
         annotationText.style.fontSize = "15px";
         annotation.appendChild(annotationText);
         setAnnotationPosition(id);
+        viewer.select(annotations[id].nodeid);
     }
 }
 
@@ -83,14 +84,14 @@ function setAnnotationPosition(id) {
 }
 
 function annotationUpdate() {
-    for (const id in annotations) {
+    for (let id in annotations) {
         let p2 = getCenterOfNode(annotations[id].nodeid);
         if (!viewer.impl.camera.position.equals(p2)) {
             clientPos = viewer.impl.worldToClient(p2, viewer.impl.camera); //рассчитывает проекцию точки на плоскость экрана
             p2.x = clientPos.x;
             p2.y = clientPos.y;
-            if (document.querySelector('#annotation-' + id)) {
-                if(p2.x>$('#viewer').width()/2) console.log($('#viewer').width());
+            if ((document.querySelector('#annotation-' + id)) && (p2.x < $('#viewer').width()) && (p2.y < $('#viewer').height())) {
+
                 document.querySelector('#annotation-' + id).style.left = p2.x + "px";
                 document.querySelector('#annotation-' + id).style.top = p2.y + "px";
             }
@@ -130,7 +131,10 @@ function getCenterOfNode(nodeId) {
 }
 
 function hideAnnotation(id) {
-    if (document.querySelector('#annotation-' + id)) $('#annotation-' + id).remove();
+    if (document.querySelector('#annotation-' + id)) {
+        $('#annotation-' + id).remove();
+        viewer.clearSelection();
+    }
 }
 
 function viewerMouseMove() {
@@ -153,11 +157,9 @@ function animTick() {
             let end = annotations[annotations.indexOf(element)].end; //конец аннотации в процентах
             if ((progress >= start) && (progress < end)) {
                 displayAnnotation(annotations.indexOf(element));
-                //viewer.select(element.nodeid);
             }
             if ((progress < start) || (progress >= end)) {
                 hideAnnotation(annotations.indexOf(element));
-                //viewer.clearSelection();
             }
         });
 
@@ -171,34 +173,4 @@ function stopAnimation() {
     clearInterval(timer);
     loadModel();
     animationLoaded = false;
-}
-
-function drawLine(point1, point2) {
-    const geometry = new THREE.Geometry()
-
-    // geometry.vertices.push (new THREE.Vector3 ( 0,  0,  0))
-    // geometry.vertices.push (new THREE.Vector3 (1000, 1000, 1000))
-    geometry.vertices.push(point1);
-    geometry.vertices.push(point2);
-
-    var linesMaterial = new THREE.LineBasicMaterial({
-        color: new THREE.Color(0xFF0000),
-        transparent: true,
-        depthWrite: false,
-        depthTest: true,
-        linewidth: 10,
-        opacity: 1.0
-    });
-
-    var lines = new THREE.Line(geometry,
-        linesMaterial,
-        THREE.LinePieces);
-
-    viewer.impl.createOverlayScene(
-        'myOverlay', linesMaterial);
-
-    viewer.impl.addOverlay(
-        'myOverlay', lines);
-
-    viewer.impl.invalidate(true);
 }
