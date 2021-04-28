@@ -85,3 +85,23 @@ table a {
     color: black;
     font-weight: bold;
 }
+
+
+
+.level2{
+
+    font-size: 14px;
+}
+
+.level2 td{
+    padding-left: 30px;
+}
+
+.level3{
+
+    font-size: 12px;
+}
+
+.level3 td{
+    padding-left: 50px;
+}

@@ -45,40 +45,56 @@ async function showContents() {
     </thead>
     <tbody>`;
 
-        //data = sortComponents(data);
-        for (let i = 1; i < data.length; i++) {
+        data = sortComponents(data);
 
-            contentstable += `<tr>
+        for (let i = 0; i < data.length; i++) {
+            contentstable += `<tr class="level1">
         <td><a href="javascript:viewer.isolate(` + data[i].node_ids + `)">` + data[i].name + `</a></td>
         <td>` + data[i].description + `</td>
         </tr>`
-        }
 
-        contentstable += "</tbody></table>"
+            if (data[i].children != undefined)
+                for (let j = 0; j < data[i].children.length; j++) {
+                    contentstable += `<tr class="level2">
+                <td><a href="javascript:viewer.isolate(` + data[i].children[j].node_ids + `)">` + data[i].children[j].name + `</a></td>
+                <td>` + data[i].children[j].description + `</td>
+                </tr>`;
+
+
+                    if (data[i].children[j].children != undefined)
+                        for (let k = 0; k < data[i].children[j].children.length; k++) {
+                            contentstable += `<tr class="level3">
+                            <td><a href="javascript:viewer.isolate(` + data[i].children[j].children[k].node_ids + `)">` + data[i].children[j].children[k].name + `</a></td>
+                            <td>` + data[i].children[j].children[k].description + `</td>
+                            </tr>`;
+
+                            if (data[i].children[j].children[k].children != undefined)
+                            for (let l = 0; l < data[i].children[j].children[k].children.length; l++) {
+                                contentstable += `<tr class="level4">
+                                <td padding="20px"><a href="javascript:viewer.isolate(` + data[i].children[j].children[k].children[l].node_ids + `)">` + data[i].children[j].children[k].children[l].name + `</a></td>
+                                <td>` + data[i].children[j].children[k].children[l].description + `</td>
+                                </tr>`;
+                            }
+                        }
+
+
+                }
+
+        };
+        contentstable += `</tbody></table>`;
 
         $("#info").html(contentstable);
-        console.log(sortComponents(data));
     });
     if (animationLoaded) stopAnimation();
 }
-
-// function checkLevel(data, id) {
-//     let level;
-//     console.log(data[id].parent_id, data[data[id].parent_id - 1].parent_id)
-//     if (data[id].parent_id == 1) level = 1;
-//     else if (data[data[id].parent_id - 1].parent_id == 1) level = 2;
-//     else if (data[data[data[id].parent_id - 1].parent_id].parent_id == 1) level = 3;
-//     else level = 4
-//     return level;
-// }
 
 function sortComponents(data) {
     let newdata = [];
     for (let i = 1; i < data.length; i++) {
         if (data[i].parent_id == 1) newdata.push(data[i]);
-        else {
-            let el = newdata.find((el) => el.id == data[i].parent_id)
-            el["children"] = [];
+        else if (data[i].parent_id != 1) {
+            let el = data.find((el) => el.id == data[i].parent_id);
+            if (el.children == undefined) el.children = [];
             el.children.push(data[i]);
         }
     }
@@ -162,7 +178,7 @@ async function showComments(id) {
         let sendcomment = document.querySelector('#commentsubmit');
         sendcomment.onclick = function (event) {
             event.preventDefault();
-            addComment($('#inputname').val(), $('#inputtext').val(), id, new Date());
+            addComment($('#inputname').val(), $('#inputtext').val(), id + 1, new Date().toLocaleString('ru-RU'));
         }
     });
 }
