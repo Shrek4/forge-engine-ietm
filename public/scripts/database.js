@@ -77,7 +77,6 @@ async function showContents() {
                             }
                         }
 
-
                 }
 
         };
