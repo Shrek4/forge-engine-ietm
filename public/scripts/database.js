@@ -15,6 +15,7 @@ async function showEngineDescription() {
     $.get("http://localhost:3000/components", function (data) {
         $("#info").html(data[0].description);
     });
+    if (animationLoaded) stopAnimation();
 }
 
 async function getAnnotations(id) {
@@ -25,12 +26,13 @@ async function getAnnotations(id) {
 
 async function showProcedureDescription(id) {
     $.get("http://localhost:3000/procedures", function (data) {
-        let description = `<div id="tools"></div>`;
+        let description = `<h1>`+data[id].proc_name+`</h1>`
+        description += `<div id="tools"></div>`;
         description += data[id].description;
         description += `<div id="comments"></div>`;
         $("#info").html(description);
         showComments(id);
-
+        getProcedureTools(id);
     });
 }
 
@@ -69,12 +71,12 @@ async function showContents() {
                             </tr>`;
 
                             if (data[i].children[j].children[k].children != undefined)
-                            for (let l = 0; l < data[i].children[j].children[k].children.length; l++) {
-                                contentstable += `<tr class="level4">
+                                for (let l = 0; l < data[i].children[j].children[k].children.length; l++) {
+                                    contentstable += `<tr class="level4">
                                 <td padding="20px"><a href="javascript:viewer.isolate(` + data[i].children[j].children[k].children[l].node_ids + `)">` + data[i].children[j].children[k].children[l].name + `</a></td>
                                 <td>` + data[i].children[j].children[k].children[l].description + `</td>
                                 </tr>`;
-                            }
+                                }
                         }
 
                 }
@@ -170,6 +172,7 @@ async function showComments(id) {
         <input type="text" id="inputname" required><br>
         <label for="text">Сообщение:</label><br>
         <textarea cols="50" id="inputtext" required></textarea><br>
+        <p></p>
         <input type="submit" value="Оставить комментарий" id="commentsubmit">
         </form>`
 
@@ -182,6 +185,101 @@ async function showComments(id) {
     });
 }
 
-async function showParts(id) {
+async function showPartsAndTools() {
+    let info = ``;
+    $.get("http://localhost:3000/parts", function (data) {
+        info += `<h1>Расходники</h1>
+        <table class="table toolstable">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Расходник</th>
+            <th scope="col">Фотография</th>
+            <th scope="col">Описание</th>
+          </tr>
+        </thead>
+        <tbody>`;
+        for (let i = 0; i < data.length; i++) {
+            info += `<tr>
+            <td>`+ data[i].name + `</td>
+            <td>`+ data[i].image + `</td>
+            <td>`+ data[i].description + `</td>
+            </tr>`;
+        }
+        info += `</tbody></table>`;
 
+    }).then(() => {
+        $.get("http://localhost:3000/tools", function (data) {
+            info += `<h1>Инструменты</h1>
+            <table class="table toolstable">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Инструмент</th>
+                <th scope="col">Фотография</th>
+                <th scope="col">Описание</th>
+              </tr>
+            </thead>
+            <tbody>`;
+
+            for (let i = 0; i < data.length; i++) {
+                info += `<tr>
+                <td>`+ data[i].name + `</td>
+                <td>`+ data[i].image + `</td>
+                <td>`+ data[i].description + `</td>
+                </tr>`;
+            }
+
+            info += `</tbody></table>`;
+
+            $("#info").html(info);
+        });
+    });
+}
+
+async function getProcedureTools(id) {
+    let info = `<h2>Вам понадобится:</h2>`;
+    $.get("http://localhost:3000/parts", function (data) {
+        let data1 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) });
+        if (data1.length != 0) {
+            info += `<table class="table toolstable">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Расходник</th>
+                <th scope="col">Фотография</th>
+              </tr>
+            </thead>
+            <tbody>`;
+            for (let i = 0; i < data1.length; i++) {
+                info += `<tr>
+                <td>`+ data1[i].name + `</td>
+                <td>`+ data1[i].image + `</td>
+                </tr>`;
+            }
+            info += `</tbody></table>`;
+        }
+
+    }).then(() => {
+        $.get("http://localhost:3000/tools", function (data) {
+            let data2 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) });
+            if (data2.length != 0) {
+                info += `<table class="table toolstable">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Инструмент</th>
+                <th scope="col">Фотография</th>
+              </tr>
+            </thead>
+            <tbody>`;
+
+                for (let i = 0; i < data2.length; i++) {
+                    info += `<tr>
+                <td>`+ data2[i].name + `</td>
+                <td>`+ data2[i].image + `</td>
+                </tr>`;
+                }
+
+                info += `</tbody></table>`;
+            }
+            $("#tools").html(info);
+        });
+    });
 }

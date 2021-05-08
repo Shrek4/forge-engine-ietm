@@ -57,10 +57,10 @@ app.listen(port, () => {
     console.log('Net address:  http://' + ipAddress + ':' + port);
 });
 
-const sqlite3 = require('sqlite3').verbose();
+let sqlite3 = require('sqlite3').verbose();
 
 // open the database
-let db = new sqlite3.Database('info.db', (err) => {
+let db = new sqlite3.Database('info.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
         console.error(err.message);
     }
@@ -104,12 +104,30 @@ db.all("SELECT * FROM comments", [], (err, rows) => {
     })
 });
 
-app.post('/addComment', function(req,res){
-    db.run('INSERT INTO comments (name, text, procedure_id, date) VALUES (?, ?, ?, ?)', [req.body.name, req.body.text, req.body.procedure_id, req.body.date], (err) => {
-        console.log(req)
-        if(err) {
-            return console.log(err.message); 
-        }
-        console.log(`Row was added to the table "comments": `+JSON.stringify(req.body));
+db.all("SELECT * FROM parts", [], (err, rows) => {
+    if (err) {
+        console.error(err.message);
+    }
+    app.get('/parts', function (req, res) {
+        res.send(rows);
     })
-})
+});
+
+db.all("SELECT * FROM tools", [], (err, rows) => {
+    if (err) {
+        console.error(err.message);
+    }
+    app.get('/tools', function (req, res) {
+        res.send(rows);
+    })
+});
+
+app.post('/addComment', function (req, res) {
+        db.run('INSERT INTO comments (name, text, procedure_id, date) VALUES (?, ?, ?, ?)', [req.body.name, req.body.text, req.body.procedure_id, req.body.date], (err) => {
+            if (err) {
+                return console.log(err.message);
+            }
+            console.log(`Row was added to the table "comments": ` + JSON.stringify(req.body));
+            res.send();
+        });
+});
