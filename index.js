@@ -94,14 +94,8 @@ db.all("SELECT * FROM other", [], (err, rows) => {
     })
 });
 
-
-db.all("SELECT * FROM comments", [], (err, rows) => {
-    if (err) {
-        console.error(err.message);
-    }
-    app.get('/comments', function (req, res) {
-        res.send(rows);
-    })
+app.get('/comments', function (req, res) {
+    processData(res, "SELECT * FROM comments");
 });
 
 db.all("SELECT * FROM parts", [], (err, rows) => {
@@ -123,6 +117,7 @@ db.all("SELECT * FROM tools", [], (err, rows) => {
 });
 
 app.post('/addComment', function (req, res) {
+    db.serialize(function () {
         db.run('INSERT INTO comments (name, text, procedure_id, date) VALUES (?, ?, ?, ?)', [req.body.name, req.body.text, req.body.procedure_id, req.body.date], (err) => {
             if (err) {
                 return console.log(err.message);
@@ -130,4 +125,24 @@ app.post('/addComment', function (req, res) {
             console.log(`Row was added to the table "comments": ` + JSON.stringify(req.body));
             res.send();
         });
+    });
 });
+
+function processData(res, sql) {
+    db.serialize(function () {
+        db.all(sql,
+            function (err, rows) {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send(err);
+                }
+                else
+                    sendData(res, rows, err);
+            });
+    });
+}
+
+function sendData(res, data, err) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.send(data);
+}

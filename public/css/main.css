@@ -86,8 +86,6 @@ table a {
     font-weight: bold;
 }
 
-
-
 .level2{
 
     font-size: 14px;
@@ -107,5 +105,5 @@ table a {
 }
 
 .toolstable img{
-    width:100%;
+    max-width:150px;
 }

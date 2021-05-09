@@ -2,7 +2,7 @@ async function showPartDescription(id) {
     $.get("http://localhost:3000/components", function (data) {
         for (let i = 0; i < data.length; i++) { //поиск элемента, содержащего айди
             let nodeid = JSON.parse(data[i].node_ids);
-            if (nodeid.indexOf(id) != -1) {
+            if (nodeid.includes(id)) {
                 viewer.select(nodeid);
                 $("#partdesc").html("<h2>" + data[i].name + "</h2>" + data[i].description);
             }
@@ -180,7 +180,7 @@ async function showComments(id) {
         let sendcomment = document.querySelector('#commentsubmit');
         sendcomment.onclick = function (event) {
             event.preventDefault();
-            addComment($('#inputname').val(), $('#inputtext').val(), id + 1, new Date().toLocaleString('ru-RU'));
+            addComment($('#inputname').val(), $('#inputtext').val(), id + 1, new Date().toLocaleString('ru-RU')).then(()=>showComments(id));
         }
     });
 }
