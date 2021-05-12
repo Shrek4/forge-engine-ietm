@@ -26,6 +26,9 @@ function CallPrint(strid) {
         grid-template-rows: 60% 40%;
         font-family: "Open Sans", sans-serif;
     }
+    .toolstable img{
+        max-width:150px;
+    }
     </style>`;
     var WinPrint = window.open('', '', 'left=50,top=50,width=800,height=640,toolbar=0,scrollbars=1,status=0');
     WinPrint.document.write('<head>');
