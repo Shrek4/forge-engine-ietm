@@ -7,8 +7,8 @@ async function showPartDescription(id) {
                 $("#partdesc").html("<h2>" + data[i].name + "</h2>" + data[i].description);
             }
         }
-
     });
+    //hideButton();
 }
 
 async function showEngineDescription() {
@@ -16,6 +16,7 @@ async function showEngineDescription() {
         $("#info").html(data[0].description);
     });
     if (animationLoaded) stopAnimation();
+    //hideButton();
 }
 
 async function getAnnotations(id) {
@@ -26,15 +27,27 @@ async function getAnnotations(id) {
 
 async function showProcedureDescription(id) {
     $.get("http://localhost:3000/procedures", function (data) {
-        let description = `<h1>`+data[id].proc_name+`</h1>`
+        let description = `<h1>` + data[id].proc_name + `</h1>`
         description += `<div id="tools"></div>`;
         description += data[id].description;
-        description += `<div id="comments"></div>`;
+        //description += `<div id="comments"></div>`;
         $("#info").html(description);
-        showComments(id);
+        getAnnotations(id);
         getProcedureTools(id);
+        //showComments(id);
+
+        // if (document.querySelector('#comment_button') == null) {
+        //     $("#viewer").append(`<button id="comment_button" type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">
+        //     <img src="../images/pencil.png" class="comment_img">
+        //     </button>`);
+        // }
+        // document.getElementById("comment_button").onclick = function () { addComment(id); }
     });
 }
+
+// function hideButton() {
+//     if (document.querySelector('#comment_button')) document.querySelector('#comment_button').remove();
+// }
 
 async function showContents() {
     $.get("http://localhost:3000/components", function (data) {
@@ -87,6 +100,7 @@ async function showContents() {
         $("#info").html(contentstable);
     });
     if (animationLoaded) stopAnimation();
+    //hideButton();
 }
 
 function sortComponents(data) {
@@ -119,71 +133,73 @@ async function showRequirements() {
     $.get("http://localhost:3000/other", function (data) {
         $("#info").html(data[0].description);
     });
+    //hideButton();
 }
 
 async function showDiagnostic() {
     $.get("http://localhost:3000/other", function (data) {
         $("#info").html(data[1].description);
     });
+    //hideButton();
 }
 
-async function addComment(name, text, procedure_id, date) {
-    let data = { name: name, text: text, procedure_id: procedure_id, date: date };
-    $.post({
-        traditional: true,
-        url: '/addComment',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        dataType: 'json',
-        success: function (response) { console.log(response); }
-    });
-}
+// async function addComment(name, text, procedure_id, date) {
+//     let data = { name: name, text: text, procedure_id: procedure_id, date: date };
+//     $.post({
+//         traditional: true,
+//         url: '/addComment',
+//         contentType: 'application/json',
+//         data: JSON.stringify(data),
+//         dataType: 'json',
+//         success: function (response) { console.log(response); }
+//     });
+// }
 
-async function showComments(id) {
-    $.get("http://localhost:3000/comments", function (data) {
-        let curdata = data.filter(element => element.procedure_id - 1 == id);
-        let comments = `<div class="comments">
-        <h3 class="title-comments">Комментарии</h3>`
-        if (curdata.length != 0) {
-            comments = `<div class="comments">
-            <h3 class="title-comments">Комментарии</h3>
-            <ul class="media-list">`;
-            for (let i = 0; i < curdata.length; i++) {
-                comments += `<li class="media">
-                <div class="media-body">
-                  <div class="media-heading">
-                    <div class="author">`+ curdata[i].name + `</div>
-                    <div class="metadata">
-                      <span class="date">`+ curdata[i].date + `</span>
-                    </div>
-                  </div>
-                  <div class="media-text text-justify">`+ curdata[i].text + `</div>
-                  <div class="footer-comment">
-                    <a class="btn btn-default" href="#">Ответить</a>
-                  </div>
-                  <hr>`
-            }
-            comments += `</ul></div>`
-        }
-        else comments += `</div>`
+// async function showComments(id) {
+//     $.get("http://localhost:3000/comments", function (data) {
+//         let curdata = data.filter(element => element.procedure_id - 1 == id);
+//         let comments = `<div class="comments">
+//         <h3 class="title-comments">Комментарии</h3>`
+//         if (curdata.length != 0) {
+//             comments = `<div class="comments">
+//             <h3 class="title-comments">Комментарии</h3>
+//             <ul class="media-list">`;
+//             for (let i = 0; i < curdata.length; i++) {
+//                 comments += `<li class="media">
+//                 <div class="media-body">
+//                   <div class="media-heading">
+//                     <div class="author">`+ curdata[i].name + `</div>
+//                     <div class="metadata">
+//                       <span class="date">`+ curdata[i].date + `</span>
+//                     </div>
+//                   </div>
+//                   <div class="media-text text-justify">`+ curdata[i].text + `</div>
+//                   <div class="footer-comment">
+//                     <a class="btn btn-default" href="#">Ответить</a>
+//                   </div>
+//                   <hr>`
+//             }
+//             comments += `</ul></div>`
+//         }
+//         else comments += `</div>`
 
-        comments += `<form>
-        <label for="name">Ваше имя:</label><br>
-        <input type="text" id="inputname" required><br>
-        <label for="text">Сообщение:</label><br>
-        <textarea cols="50" id="inputtext" required></textarea><br>
-        <p></p>
-        <input type="submit" value="Оставить комментарий" id="commentsubmit">
-        </form>`
+//         comments += `<form>
+//         <label for="name">Ваше имя:</label><br>
+//         <input type="text" id="inputname" required><br>
+//         <label for="text">Сообщение:</label><br>
+//         <textarea cols="50" id="inputtext" required></textarea><br>
+//         <p></p>
+//         <input type="submit" value="Оставить комментарий" id="commentsubmit">
+//         </form>`
 
-        $("#comments").html(comments);
-        let sendcomment = document.querySelector('#commentsubmit');
-        sendcomment.onclick = function (event) {
-            event.preventDefault();
-            addComment($('#inputname').val(), $('#inputtext').val(), id + 1, new Date().toLocaleString('ru-RU')).then(()=>showComments(id));
-        }
-    });
-}
+//         $("#comments").html(comments);
+//         let sendcomment = document.querySelector('#commentsubmit');
+//         sendcomment.onclick = function (event) {
+//             event.preventDefault();
+//             addComment($('#inputname').val(), $('#inputtext').val(), id + 1, new Date().toLocaleString('ru-RU')).then(()=>showComments(id));
+//         }
+//     });
+// }
 
 async function showPartsAndTools() {
     let info = ``;
@@ -233,6 +249,7 @@ async function showPartsAndTools() {
             $("#info").html(info);
         });
     });
+    //hideButton();
 }
 
 async function getProcedureTools(id) {

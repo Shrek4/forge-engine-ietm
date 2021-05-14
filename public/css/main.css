@@ -16,12 +16,22 @@ body {
     grid-row-end: 3;
 }
 
+#sidebar {
+    padding: 10px;
+    overflow: scroll;
+    overflow-x: hidden;
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+
 @media only screen and (max-width: 768px) {
-    #panel-right {
+    #sidebar {
         position: relative;
         padding: 24px;
         grid-column-start: 1;
-        grid-column-end: 4;
+        grid-column-end: 2;
         grid-row-start: 2;
         grid-row-end: 3;
         overflow: scroll;
@@ -31,9 +41,12 @@ body {
     #viewer {
         position: relative;
         grid-column-start: 1;
-        grid-column-end: 4;
+        grid-column-end: 2;
         grid-row-start: 1;
         grid-row-end: 2;
+    }
+    body{
+        grid-template-columns: auto;
     }
 }
 
@@ -47,16 +60,6 @@ body {
 
 p {
     font-weight: bold;
-}
-
-#sidebar {
-    padding: 10px;
-    overflow: scroll;
-    overflow-x: hidden;
-    grid-column-start: 2;
-    grid-column-end: 2;
-    grid-row-start: 1;
-    grid-row-end: 3;
 }
 
 .annotation {
@@ -86,24 +89,22 @@ table a {
     font-weight: bold;
 }
 
-.level2{
-
+.level2 {
     font-size: 14px;
 }
 
-.level2 td{
+.level2 td {
     padding-left: 30px;
 }
 
-.level3{
-
+.level3 {
     font-size: 12px;
 }
 
-.level3 td{
+.level3 td {
     padding-left: 50px;
 }
 
-.toolstable img{
-    max-width:150px;
+.toolstable img {
+    max-width: 150px;
 }

@@ -1,6 +1,6 @@
 var annotations = {};
-var stages = {};
 var timer;
+//var comments = {};
 
 showEngineDescription();
 showProcedures();
@@ -93,7 +93,7 @@ function annotationUpdate() {
             clientPos = viewer.impl.worldToClient(p2, viewer.impl.camera); //рассчитывает проекцию точки на плоскость экрана
             p2.x = clientPos.x;
             p2.y = clientPos.y;
-            if ((document.querySelector('#annotation-' + id)) && (p2.x < $('#viewer').width()) && (p2.y < $('#viewer').height())) {
+            if ((document.querySelector('#annotation-' + id)) && (p2.x < $('#viewer').width()) && (p2.y < $('#viewer').height()) && (p2.y > 0) && (p2.x > 0)) {
 
                 document.querySelector('#annotation-' + id).style.left = p2.x + "px";
                 document.querySelector('#annotation-' + id).style.top = p2.y + "px";
@@ -151,7 +151,6 @@ function viewerMouseMove() {
 function animTick() {
     if (animationLoaded) {
         let animExt = viewer.getExtension("Autodesk.Fusion360.Animation");
-
 
         let progress = Math.floor(animExt.getCurrentTime() / animExt.getDuration() * 100); //прогресс в процентах
 

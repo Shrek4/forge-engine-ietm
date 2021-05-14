@@ -68,7 +68,6 @@ function loadAnimation(doc, id) {
 
     viewer.start(animationUrl, {}, onLoadModelSuccess2, onLoadModelError);
     currentAnimId=id;
-    getAnnotations(id);
 }
 
 function onLoadModelSuccess(model) {
