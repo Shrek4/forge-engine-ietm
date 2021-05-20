@@ -17,10 +17,14 @@
   "dependencies": {
     "autodesk-forge-tools": "^0.2.0",
     "axios": "^0.21.1",
+    "bcryptjs": "^2.4.3",
+    "crypto": "^1.0.1",
     "express": "^4.17.1",
     "helmet": "^4.1.0",
     "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "sqlite3": "^5.0.2",
     "three-full": "^28.0.2",
     "validator": "^10.11.0"

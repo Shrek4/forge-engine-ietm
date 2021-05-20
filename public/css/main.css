@@ -26,7 +26,7 @@ body {
     grid-row-end: 3;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1000px) {
     #sidebar {
         position: relative;
         padding: 24px;

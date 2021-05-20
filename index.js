@@ -1,6 +1,8 @@
 const express = require('express')
 const Axios = require('axios');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcryptjs');
+const uuidv4 = require('uuid/v4');
 const FORGE_CLIENT_ID = "7TQxVjm16exkmJcwsFmkaJe5bwa9uewI";
 const FORGE_CLIENT_SECRET = "EDnxgAsO6jxL4rRc";
 
@@ -116,6 +118,15 @@ db.all("SELECT * FROM tools", [], (err, rows) => {
     })
 });
 
+db.all("SELECT * FROM documents", [], (err, rows) => {
+    if (err) {
+        console.error(err.message);
+    }
+    app.get('/documents', function (req, res) {
+        res.send(rows);
+    })
+});
+
 app.post('/addComment', function (req, res) {
     db.serialize(function () {
         db.run('INSERT INTO comments (name, text, procedure_id, date) VALUES (?, ?, ?, ?)', [req.body.name, req.body.text, req.body.procedure_id, req.body.date], (err) => {
@@ -145,4 +156,54 @@ function processData(res, sql) {
 function sendData(res, data, err) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.send(data);
+}
+
+app.post('/register', function (req, res) {
+    if (req.body.password === req.body.repeatPassword) {
+        db.serialize(function () {
+            db.all(`SELECT * FROM users WHERE username = ?`, [req.body.username], (err, rows) => {
+                if (rows.length == 0) {
+                    db.run('INSERT INTO users (username, password) VALUES (?, ?)', [req.body.username, bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null)], (err) => {
+                        if (err) {
+                            return console.log(err.message);
+                        }
+                        console.log(`Пользователь добавлен: ` + JSON.stringify(req.body.username));
+                        res.sendStatus(200);
+                    });
+                }
+                else {
+                    console.error('Такой пользователь уже есть');
+                    res.sendStatus(404);
+                }
+            });
+        });
+    }
+    else {
+        console.error('Не совпадает пароль и подтверждение пароля');
+        res.sendStatus(400);
+    }
+});
+
+app.post(`/login`, function (req, res) {
+    db.serialize(function () {
+        db.all(`SELECT * FROM users WHERE username = ?`, [req.body.username], (err, rows) => {
+            if (rows.length == 1) {
+                if (isValidPassword(rows[0], req.body.password)) {
+                    res.sendStatus(200);
+                }
+                else {
+                    console.error('Неправильный пароль');
+                    res.sendStatus(400);
+                }
+            }
+            else {
+                console.error('Неправильный логин');
+                res.sendStatus(404);
+            }
+        });
+    });
+});
+
+let isValidPassword = function (user, password) {
+    return bcrypt.compareSync(password, user.password);
 }

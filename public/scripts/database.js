@@ -1,4 +1,4 @@
-async function showPartDescription(id) {
+async function showPartDescription(id) { //показывает описание детали
     $.get("http://localhost:3000/components", function (data) {
         for (let i = 0; i < data.length; i++) { //поиск элемента, содержащего айди
             let nodeid = JSON.parse(data[i].node_ids);
@@ -8,48 +8,35 @@ async function showPartDescription(id) {
             }
         }
     });
-    //hideButton();
 }
 
-async function showEngineDescription() {
+async function showEngineDescription() { //показывает описание двигателя
     $.get("http://localhost:3000/components", function (data) {
         $("#info").html(data[0].description);
     });
     if (animationLoaded) stopAnimation();
-    //hideButton();
 }
 
-async function getAnnotations(id) {
+async function getAnnotations(id) { //берёт аннотации к анимации процедуры из БД
     $.get("http://localhost:3000/procedures", function (data) {
         annotations = JSON.parse(data[id].annotations);
     });
 }
 
-async function showProcedureDescription(id) {
+async function showProcedureDescription(id) { //показывает страницу процедуры
     $.get("http://localhost:3000/procedures", function (data) {
         let description = `<h1>` + data[id].proc_name + `</h1>`
         description += `<div id="tools"></div>`;
         description += data[id].description;
-        //description += `<div id="comments"></div>`;
+        description += `<div id="comments"></div>`;
         $("#info").html(description);
         getAnnotations(id);
         getProcedureTools(id);
-        //showComments(id);
-
-        // if (document.querySelector('#comment_button') == null) {
-        //     $("#viewer").append(`<button id="comment_button" type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">
-        //     <img src="../images/pencil.png" class="comment_img">
-        //     </button>`);
-        // }
-        // document.getElementById("comment_button").onclick = function () { addComment(id); }
+        showComments(id);
     });
 }
 
-// function hideButton() {
-//     if (document.querySelector('#comment_button')) document.querySelector('#comment_button').remove();
-// }
-
-async function showContents() {
+async function showContents() { //показывает состав двигателя
     $.get("http://localhost:3000/components", function (data) {
         let contentstable = `<table class="table contentstable">
     <thead class="thead-light">
@@ -62,7 +49,7 @@ async function showContents() {
 
         data = sortComponents(data);
 
-        for (let i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) { //добавление строк таблицы в соответствии с иерархией
             contentstable += `<tr class="level1">
         <td><a href="javascript:viewer.isolate(` + data[i].node_ids + `)">` + data[i].name + `</a></td>
         <td>` + data[i].description + `</td>
@@ -100,10 +87,9 @@ async function showContents() {
         $("#info").html(contentstable);
     });
     if (animationLoaded) stopAnimation();
-    //hideButton();
 }
 
-function sortComponents(data) {
+function sortComponents(data) { //сортирует массив компонентов в иерархическом виде
     let newdata = [];
     for (let i = 1; i < data.length; i++) {
         if (data[i].parent_id == 1) newdata.push(data[i]);
@@ -116,7 +102,7 @@ function sortComponents(data) {
     return newdata;
 }
 
-async function showProcedures() {
+async function showProcedures() { //показывает список процедур в меню
     $.get("http://localhost:3000/procedures", function (data) {
         let mn = ``;
         let rep = ``;
@@ -129,79 +115,81 @@ async function showProcedures() {
     });
 }
 
-async function showRequirements() {
+async function showRequirements() { //показывает технические требования
     $.get("http://localhost:3000/other", function (data) {
         $("#info").html(data[0].description);
     });
-    //hideButton();
 }
 
-async function showDiagnostic() {
+async function showDiagnostic() { //показывает диагностику неисправностей
     $.get("http://localhost:3000/other", function (data) {
         $("#info").html(data[1].description);
     });
-    //hideButton();
 }
 
-// async function addComment(name, text, procedure_id, date) {
-//     let data = { name: name, text: text, procedure_id: procedure_id, date: date };
-//     $.post({
-//         traditional: true,
-//         url: '/addComment',
-//         contentType: 'application/json',
-//         data: JSON.stringify(data),
-//         dataType: 'json',
-//         success: function (response) { console.log(response); }
-//     });
-// }
+async function addComment(name, text, procedure_id, date) {
+    let data = { name: name, text: text, procedure_id: procedure_id, date: date };
+    $.post({
+        traditional: true,
+        url: '/addComment',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        success: function (response) { console.log(response); }
+    });
+}
 
-// async function showComments(id) {
-//     $.get("http://localhost:3000/comments", function (data) {
-//         let curdata = data.filter(element => element.procedure_id - 1 == id);
-//         let comments = `<div class="comments">
-//         <h3 class="title-comments">Комментарии</h3>`
-//         if (curdata.length != 0) {
-//             comments = `<div class="comments">
-//             <h3 class="title-comments">Комментарии</h3>
-//             <ul class="media-list">`;
-//             for (let i = 0; i < curdata.length; i++) {
-//                 comments += `<li class="media">
-//                 <div class="media-body">
-//                   <div class="media-heading">
-//                     <div class="author">`+ curdata[i].name + `</div>
-//                     <div class="metadata">
-//                       <span class="date">`+ curdata[i].date + `</span>
-//                     </div>
-//                   </div>
-//                   <div class="media-text text-justify">`+ curdata[i].text + `</div>
-//                   <div class="footer-comment">
-//                     <a class="btn btn-default" href="#">Ответить</a>
-//                   </div>
-//                   <hr>`
-//             }
-//             comments += `</ul></div>`
-//         }
-//         else comments += `</div>`
+async function showComments(id) {
+    $.get("http://localhost:3000/comments", function (data) {
+        let curdata = data.filter(element => element.procedure_id - 1 == id);
+        let comments = `<div class="comments">
+        <h3 class="title-comments">Комментарии</h3>`
+        if (curdata.length != 0) {
+            comments = `<div class="comments">
+            <h3 class="title-comments">Комментарии</h3>
+            <ul class="media-list">`;
+            for (let i = 0; i < curdata.length; i++) {
+                comments += `<li class="media">
+                <div class="media-body">
+                  <div class="media-heading">
+                    <div class="author">`+ curdata[i].name + `</div>
+                    <div class="metadata">
+                      <span class="date">`+ curdata[i].date + `</span>
+                    </div>
+                  </div>
+                  <div class="media-text text-justify">`+ curdata[i].text + `</div>
+                  <div class="footer-comment">
+                    <a class="btn btn-default" href="#" onclick="reply('`+curdata[i].name+`')">Ответить</a>
+                  </div>
+                  <hr>`
+            }
+            comments += `</ul></div>`
+        }
+        else comments += `</div>`
 
-//         comments += `<form>
-//         <label for="name">Ваше имя:</label><br>
-//         <input type="text" id="inputname" required><br>
-//         <label for="text">Сообщение:</label><br>
-//         <textarea cols="50" id="inputtext" required></textarea><br>
-//         <p></p>
-//         <input type="submit" value="Оставить комментарий" id="commentsubmit">
-//         </form>`
+        comments += `<form>
+        <label for="name">Ваше имя:</label><br>
+        <input type="text" id="inputname" required><br>
+        <label for="text">Сообщение:</label><br>
+        <textarea cols="50" id="inputtext" required></textarea><br>
+        <p></p>
+        <input type="submit" value="Оставить комментарий" id="commentsubmit">
+        </form>`
 
-//         $("#comments").html(comments);
-//         let sendcomment = document.querySelector('#commentsubmit');
-//         sendcomment.onclick = function (event) {
-//             event.preventDefault();
-//             addComment($('#inputname').val(), $('#inputtext').val(), id + 1, new Date().toLocaleString('ru-RU')).then(()=>showComments(id));
-//         }
-//     });
-// }
+        $("#comments").html(comments);
+        let sendcomment = document.querySelector('#commentsubmit');
+        sendcomment.onclick = function (event) {
+            event.preventDefault();
+            addComment($('#inputname').val(), $('#inputtext').val(), id + 1, new Date().toLocaleString('ru-RU')).then(()=>showComments(id));
+        }
+    });
+}
 
-async function showPartsAndTools() {
+function reply(name){
+    $('#inputtext').val('<b>'+name+',</b> ');
+}
+
+async function showPartsAndTools() { //показывает инструменты и расходники
     let info = ``;
     $.get("http://localhost:3000/parts", function (data) {
         info += `<h1>Расходники</h1>
@@ -252,10 +240,10 @@ async function showPartsAndTools() {
     //hideButton();
 }
 
-async function getProcedureTools(id) {
+async function getProcedureTools(id) { //показывает инструменты и расходники на странице процедуры
     let info = `<h2>Вам понадобится:</h2>`;
     $.get("http://localhost:3000/parts", function (data) {
-        let data1 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) });
+        let data1 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) }); //фильтр расходников, связанных с процедурой
         if (data1.length != 0) {
             info += `<table class="table toolstable">
             <thead class="thead-light">
@@ -276,7 +264,7 @@ async function getProcedureTools(id) {
 
     }).then(() => {
         $.get("http://localhost:3000/tools", function (data) {
-            let data2 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) });
+            let data2 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) }); //фильтр инструментов, связанных с процедурой
             if (data2.length != 0) {
                 info += `<table class="table toolstable">
             <thead class="thead-light">
@@ -299,4 +287,19 @@ async function getProcedureTools(id) {
             $("#tools").html(info);
         });
     });
+}
+
+async function showDocuments() { //показывает документы
+    $.get("http://localhost:3000/documents", function (data) {
+        let info = `<h2>Документы ИЭТР</h2><ul>`;
+        for (let i = 0; i < data.length; i++) {
+            info += `<li><a href="javascript:void(0)" onclick="showDoc(` + data[i].doc + `)">` + data[i].name + `</a></li`;
+        }
+        info += `</ul>`;
+        $("#info").html(info);
+    });
+}
+
+function showDoc(doc) {
+    $("#viewer").html(`<iframe src="` + doc + `" style="width:100%; height:100%;" frameborder="0"></iframe>`);
 }

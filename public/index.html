@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/comments.css">
+    <link rel="stylesheet" href="css/authorization.css">
 </head>
 
 <body>
@@ -50,12 +51,15 @@
                 </li>
                 <li><a href="javascript:void(0)" onclick="showRequirements(), closeNav()">Технические требования</a>
                 </li>
+                <li><a href="javascript:void(0)" onclick="showDocuments(), closeNav()">Документы</a>
+                </li>
             </ul>
         </div>
         <div>
             <span id="navbutton" style="font-size:30px;cursor:pointer" onclick="openNav()">☰ Содержание</span>
             <img class="print-doc" style="width:30px;cursor:pointer;margin:5px;" onclick="CallPrint('info')"
                 src="../images/printer.png" alt="Распечатать">
+            <button type="button" class="btn btn-light" onclick="document.getElementById('id01').style.display='block'">Войти</button>
         </div>
 
         <div id="info">
@@ -64,6 +68,31 @@
 
     </div>
 
+    <div id="id01" class="modal">
+  
+        <form class="modal-content animate" action="/action_page.php">
+          <div class="imgcontainer">
+            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">×</span>
+          </div>
+      
+          <div class="container">
+            <label for="uname"><b>Логин</b></label>
+            <input type="text" placeholder="Введите логин" name="uname" required>
+      
+            <label for="psw"><b>Пароль</b></label>
+            <input type="password" placeholder="Введите пароль" name="psw" required>
+              
+            <button type="submit" class="btn btn-primary">Войти</button>
+            <label>
+              <input type="checkbox" checked="checked" name="remember"> Запомнить
+            </label>
+          </div>
+      
+          <div class="container" style="background-color:#f1f1f1">
+            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn btn btn-secondary">Отмена</button>
+          </div>
+        </form>
+      </div>
 
     <!-- Lib Scripts -->
 

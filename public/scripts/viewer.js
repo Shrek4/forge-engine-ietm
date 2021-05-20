@@ -24,6 +24,7 @@ Autodesk.Viewing.Initializer(options, function () {
 });
 
 function loadModel() {
+    $("#viewer").html(`<img src="../images/forge.png" class="logo"></img>`);
     const htmlDiv = document.getElementById("viewer");
     const config = {
         extensions: ['Autodesk.Fusion360.Animation', 'Autodesk.NPR'],
