@@ -1,3 +1,5 @@
+var current_user;
+
 async function showPartDescription(id) { //показывает описание детали
     $.get("http://localhost:3000/components", function (data) {
         for (let i = 0; i < data.length; i++) { //поиск элемента, содержащего айди
@@ -159,7 +161,7 @@ async function showComments(id) {
                   </div>
                   <div class="media-text text-justify">`+ curdata[i].text + `</div>
                   <div class="footer-comment">
-                    <a class="btn btn-default" href="#" onclick="reply('`+curdata[i].name+`')">Ответить</a>
+                    <a class="btn btn-default" href="#" onclick="reply('`+ curdata[i].name + `')">Ответить</a>
                   </div>
                   <hr>`
             }
@@ -167,26 +169,31 @@ async function showComments(id) {
         }
         else comments += `</div>`
 
-        comments += `<form>
-        <label for="name">Ваше имя:</label><br>
-        <input type="text" id="inputname" required><br>
-        <label for="text">Сообщение:</label><br>
-        <textarea cols="50" id="inputtext" required></textarea><br>
-        <p></p>
-        <input type="submit" value="Оставить комментарий" id="commentsubmit">
-        </form>`
-
-        $("#comments").html(comments);
-        let sendcomment = document.querySelector('#commentsubmit');
-        sendcomment.onclick = function (event) {
-            event.preventDefault();
-            addComment($('#inputname').val(), $('#inputtext').val(), id + 1, new Date().toLocaleString('ru-RU')).then(()=>showComments(id));
+        if (current_user != undefined) {
+            comments += `<form id="commentform">
+            <label for="name">Ваше имя:</label><br>
+            <input disabled type="text" id="inputname" required><br>
+            <label for="text">Сообщение:</label><br>
+            <textarea cols="50" id="inputtext" required></textarea><br>
+            <p></p>
+            <input type="submit" value="Оставить комментарий" id="commentsubmit">
+            </form>`;
+            $("#comments").html(comments);
+            $('#inputname').val(current_user);
+            let commentform = document.querySelector('#commentform');
+            commentform.onsubmit = function (event) {
+                event.preventDefault();
+                addComment(current_user, $('#inputtext').val(), id + 1, new Date().toLocaleString('ru-RU')).then(() => showComments(id));
+            }
+        }
+        else {
+            $("#comments").html(comments);
         }
     });
 }
 
-function reply(name){
-    $('#inputtext').val('<b>'+name+',</b> ');
+function reply(name) {
+    $('#inputtext').val('<b>' + name + ',</b> ');
 }
 
 async function showPartsAndTools() { //показывает инструменты и расходники
@@ -302,4 +309,35 @@ async function showDocuments() { //показывает документы
 
 function showDoc(doc) {
     $("#viewer").html(`<iframe src="` + doc + `" style="width:100%; height:100%;" frameborder="0"></iframe>`);
+}
+
+async function login(username, password) {
+    let data = { username: username, password: password };
+    $.post({
+        traditional: true,
+        url: '/login',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        dataType: 'html',
+        success: function (response) { current_user = response; $("#loginbutton").html(response); showEngineDescription(); document.getElementById('id01').style.display='none'},
+        error: function(error) {
+            alert("Неправильный логин или пароль");
+        }
+    });
+}
+
+async function register(username, password, repeatPassword) {
+    let data = { username: username, password: password, repeatPassword: repeatPassword };
+    $.post({
+        traditional: true,
+        url: '/register',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        success: function (response) { console.log(response); }
+    });
+}
+
+async function deleteComment(id){
+
 }

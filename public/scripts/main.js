@@ -186,3 +186,9 @@ window.onclick = function (event) {
         modal.style.display = "none";
     }
 }
+
+let loginform = document.querySelector('#loginform');
+loginform.onsubmit = function (event) {
+    event.preventDefault();
+    login($("#unameinput").val(), $("#pswinput").val());
+}

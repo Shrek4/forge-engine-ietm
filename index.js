@@ -189,7 +189,7 @@ app.post(`/login`, function (req, res) {
         db.all(`SELECT * FROM users WHERE username = ?`, [req.body.username], (err, rows) => {
             if (rows.length == 1) {
                 if (isValidPassword(rows[0], req.body.password)) {
-                    res.sendStatus(200);
+                    res.send(req.body.username);
                 }
                 else {
                     console.error('Неправильный пароль');

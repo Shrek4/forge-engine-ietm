@@ -23,16 +23,11 @@ input[type=text], input[type=password] {
     position: relative;
 }
 
-img.avatar {
-    width: 40%;
-    border-radius: 50%;
-}
-
 .container {
     padding: 16px;
 }
 
-span.psw {
+.reg {
     float: right;
     padding-top: 16px;
 }
@@ -93,8 +88,8 @@ span.psw {
 }
 
 /* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-    span.psw {
+@media screen and (max-width: 400px) {
+    .reg {
        display: block;
        float: none;
     }

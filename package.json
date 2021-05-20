@@ -21,6 +21,7 @@
     "crypto": "^1.0.1",
     "express": "^4.17.1",
     "helmet": "^4.1.0",
+    "jquery": "^3.6.0",
     "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
     "passport": "^0.4.1",
