@@ -178,7 +178,7 @@ function stopAnimation() {
 }
 
 // Get the modal
-var modal = document.getElementById('id01');
+let modal = document.getElementById('id01');
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
@@ -191,4 +191,20 @@ let loginform = document.querySelector('#loginform');
 loginform.onsubmit = function (event) {
     event.preventDefault();
     login($("#unameinput").val(), $("#pswinput").val());
+}
+
+let registerform = document.querySelector('#registerform');
+registerform.onsubmit = function (event) {
+    event.preventDefault();
+    register($("#regunameinput").val(), $("#regpswinput").val(), $("#regrepeatpswinput").val());
+}
+
+checkUser();
+async function checkUser() {
+    let user = await getCurrentUser();
+    if (user.username != undefined) {
+        $("#loginbutton").html(user.username);
+        $("#logout").append(`<button id="logoutbutton" type="button" onclick="logout()" class="cancelbtn btn btn-secondary">Выйти</button>`)
+    }
+    user = undefined;
 }

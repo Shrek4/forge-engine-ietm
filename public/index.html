@@ -88,14 +88,41 @@
                 <button type="submit" class="btn btn-primary">Войти</button>
             </div>
 
-            <div class="container" style="background-color:#f1f1f1">
+            <div id="logout" class="container" style="background-color:#f1f1f1">
                 <button type="button" onclick="document.getElementById('id01').style.display='none'"
                     class="cancelbtn btn btn-secondary">Отмена</button>
-                <a class="reg" href="javascript:void(0)">Регистрация</a>
+                <a id="reglink" onclick="document.getElementById('id02').style.display='block'" class="reg" href="javascript:void(0)">Регистрация</a>
             </div>
         </form>
     </div>
 
+    <div id="id02" class="modal">
+
+        <form id="registerform" class="modal-content animate">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id02').style.display='none'" class="close"
+                    title="Close Modal">×</span>
+            </div>
+
+            <div class="container">
+                <label for="uname"><b>Логин</b></label>
+                <input id="regunameinput" type="text" placeholder="Введите логин" name="uname" required>
+
+                <label for="psw"><b>Пароль</b></label>
+                <input id="regpswinput" type="password" placeholder="Введите пароль" name="psw" required>
+
+                <label for="reppsw"><b>Повторите пароль</b></label>
+                <input id="regrepeatpswinput" type="password" placeholder="Введите пароль" name="reppsw" required>
+
+                <button type="submit" class="btn btn-primary">Регистрация</button>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('id02').style.display='none'"
+                    class="cancelbtn btn btn-secondary">Отмена</button>
+            </div>
+        </form>
+    </div>
     <!-- Lib Scripts -->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

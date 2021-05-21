@@ -2,7 +2,7 @@ const express = require('express')
 const Axios = require('axios');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
-const uuidv4 = require('uuid/v4');
+const clientSessions = require("client-sessions");
 const FORGE_CLIENT_ID = "7TQxVjm16exkmJcwsFmkaJe5bwa9uewI";
 const FORGE_CLIENT_SECRET = "EDnxgAsO6jxL4rRc";
 
@@ -43,6 +43,7 @@ app.get('/oauth', function (req, res) {
 
 const os = require('os');
 const { default: axios } = require('axios');
+const { allowedNodeEnvironmentFlags } = require('process');
 function getIp() {
     for (let key in os.networkInterfaces()) {
         if (os.networkInterfaces()[key][1].address != undefined) return os.networkInterfaces()[key][1].address;
@@ -158,8 +159,13 @@ function sendData(res, data, err) {
     res.send(data);
 }
 
+app.use(clientSessions({
+    secret: '5hR3k1sL0v35hR3k1sL1f3',
+    duration: 60 * 60 * 1000
+}));
+
 app.post('/register', function (req, res) {
-    if (req.body.password === req.body.repeatPassword) {
+    if (req.body.password === req.body.repeatpassword) {
         db.serialize(function () {
             db.all(`SELECT * FROM users WHERE username = ?`, [req.body.username], (err, rows) => {
                 if (rows.length == 0) {
@@ -189,6 +195,8 @@ app.post(`/login`, function (req, res) {
         db.all(`SELECT * FROM users WHERE username = ?`, [req.body.username], (err, rows) => {
             if (rows.length == 1) {
                 if (isValidPassword(rows[0], req.body.password)) {
+                    req.session_state.username = req.body.username;
+                    req.session_state.admin = rows[0].admin;
                     res.send(req.body.username);
                 }
                 else {
@@ -207,3 +215,30 @@ app.post(`/login`, function (req, res) {
 let isValidPassword = function (user, password) {
     return bcrypt.compareSync(password, user.password);
 }
+app.get('/currentuser', function (req, res) {
+    res.send({ username: req.session_state.username, isadmin: req.session_state.admin });
+});
+
+app.get('/logout', function (req, res) {
+    req.session_state.reset();
+    res.send();
+});
+
+app.post('/deletecomment', function (req, res) {
+    let comments = [];
+    db.serialize(function () {
+        db.all("SELECT * FROM comments WHERE procedure_id = ?", [req.body.proc_id], (err, rows) => {
+            if (err) {
+                console.error(err.message);
+            }
+            comments = rows;
+            db.all(`DELETE FROM comments WHERE id = ?`, [comments[req.body.id].id], (err, rows) => {
+                if (err) {
+                    return console.log(err.message);
+                }
+                console.log("Removed comment: " + JSON.stringify(comments[req.body.id]));
+                res.send();
+            });
+        });
+    });
+});

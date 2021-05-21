@@ -1,5 +1,3 @@
-var current_user;
-
 async function showPartDescription(id) { //показывает описание детали
     $.get("http://localhost:3000/components", function (data) {
         for (let i = 0; i < data.length; i++) { //поиск элемента, содержащего айди
@@ -142,8 +140,10 @@ async function addComment(name, text, procedure_id, date) {
 }
 
 async function showComments(id) {
-    $.get("http://localhost:3000/comments", function (data) {
+    $.get("http://localhost:3000/comments", async function (data) {
         let curdata = data.filter(element => element.procedure_id - 1 == id);
+        let current_user = await getCurrentUser();
+
         let comments = `<div class="comments">
         <h3 class="title-comments">Комментарии</h3>`
         if (curdata.length != 0) {
@@ -161,15 +161,17 @@ async function showComments(id) {
                   </div>
                   <div class="media-text text-justify">`+ curdata[i].text + `</div>
                   <div class="footer-comment">
-                    <a class="btn btn-default" href="#" onclick="reply('`+ curdata[i].name + `')">Ответить</a>
-                  </div>
-                  <hr>`
+                    <a class="btn btn-default" href="javascript:void(0)" onclick="reply('`+ curdata[i].name + `')">Ответить</a>
+                  </div>`
+                if (current_user.isadmin == 1) comments += `<a class="btn btn-default" href="javascript:void(0)" onclick="deleteComment(` + i + `, ` + (id + 1) + `)">Удалить</a>`;
+                comments += `<hr>`;
             }
-            comments += `</ul></div>`
+
+            comments += `</ul></div>`;
         }
         else comments += `</div>`
 
-        if (current_user != undefined) {
+        if (current_user.username != undefined) {
             comments += `<form id="commentform">
             <label for="name">Ваше имя:</label><br>
             <input disabled type="text" id="inputname" required><br>
@@ -179,11 +181,11 @@ async function showComments(id) {
             <input type="submit" value="Оставить комментарий" id="commentsubmit">
             </form>`;
             $("#comments").html(comments);
-            $('#inputname').val(current_user);
+            $('#inputname').val(current_user.username);
             let commentform = document.querySelector('#commentform');
             commentform.onsubmit = function (event) {
                 event.preventDefault();
-                addComment(current_user, $('#inputtext').val(), id + 1, new Date().toLocaleString('ru-RU')).then(() => showComments(id));
+                addComment(current_user.username, $('#inputtext').val(), id + 1, new Date().toLocaleString('ru-RU')).then(() => showComments(id));
             }
         }
         else {
@@ -244,7 +246,6 @@ async function showPartsAndTools() { //показывает инструмент
             $("#info").html(info);
         });
     });
-    //hideButton();
 }
 
 async function getProcedureTools(id) { //показывает инструменты и расходники на странице процедуры
@@ -319,25 +320,61 @@ async function login(username, password) {
         contentType: 'application/json',
         data: JSON.stringify(data),
         dataType: 'html',
-        success: function (response) { current_user = response; $("#loginbutton").html(response); showEngineDescription(); document.getElementById('id01').style.display='none'},
-        error: function(error) {
+        success: function (response) {
+            $("#loginbutton").html(response);
+            showEngineDescription();
+            document.getElementById('id01').style.display = 'none';
+            $("#logout").append(`<button id="logoutbutton" type="button" onclick="logout()" class="cancelbtn btn btn-secondary">Выйти</button>`)
+        },
+        error: function (error) {
             alert("Неправильный логин или пароль");
         }
     });
 }
 
 async function register(username, password, repeatPassword) {
-    let data = { username: username, password: password, repeatPassword: repeatPassword };
+    let data = { username: username, password: password, repeatpassword: repeatPassword };
     $.post({
         traditional: true,
         url: '/register',
         contentType: 'application/json',
         data: JSON.stringify(data),
-        dataType: 'json',
-        success: function (response) { console.log(response); }
+        dataType: 'html',
+        success: function (response) { alert("Успех") },
+        error: function (error) { alert("Проверьте правильность пароля") }
     });
 }
 
-async function deleteComment(id){
+async function deleteComment(id, proc_id) {
+    $.post({
+        traditional: true,
+        url: '/deletecomment',
+        contentType: 'application/json',
+        data: JSON.stringify({ id: id, proc_id: proc_id }),
+        dataType: 'html',
+        success: function (response) { showComments(proc_id - 1) }
+    });
+}
 
+async function getCurrentUser() {
+    let result;
+    $.ajax({
+        url: "http://localhost:3000/currentuser",
+        type: 'get',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            result = data;
+        }
+    });
+    return { username: result.username, isadmin: result.isadmin };
+}
+
+async function logout() {
+    $.get("http://localhost:3000/logout", function (data) {
+        $("#loginbutton").html("Войти");
+        document.getElementById('id01').style.display = 'none';
+        showEngineDescription();
+        $("#logoutbutton").remove();
+    });
 }
