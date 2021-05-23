@@ -1,5 +1,6 @@
 let viewer; //текущий вьювер
 let doc1; //текущий документ вьювера
+let isModelLoaded=true;
 let animationLoaded=false; //загружена ли анимация
 let currentAnimId; //текущий айди анимации
 //айди модели из models.autodesk.io
@@ -25,6 +26,7 @@ Autodesk.Viewing.Initializer(options, function () {
 
 function loadModel() {
     $("#viewer").html(`<img src="../images/forge.png" class="logo"></img>`);
+    isModelLoaded=true;
     const htmlDiv = document.getElementById("viewer");
     const config = {
         extensions: ['Autodesk.Fusion360.Animation', 'Autodesk.NPR'],

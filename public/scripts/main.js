@@ -53,6 +53,7 @@ function selectionPart() {
         <p>Выберите деталь на модели</p>
     </div>`
     if (animationLoaded) stopAnimation();
+    if(!isModelLoaded) loadModel();
 }
 
 function startAnimation(id) {

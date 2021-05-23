@@ -15,6 +15,7 @@ async function showEngineDescription() { //показывает описание
         $("#info").html(data[0].description);
     });
     if (animationLoaded) stopAnimation();
+    if(!isModelLoaded) loadModel();
 }
 
 async function getAnnotations(id) { //берёт аннотации к анимации процедуры из БД
@@ -33,6 +34,7 @@ async function showProcedureDescription(id) { //показывает стран�
         getAnnotations(id);
         getProcedureTools(id);
         showComments(id);
+        if(!isModelLoaded) loadModel();
     });
 }
 
@@ -87,6 +89,7 @@ async function showContents() { //показывает состав двигат
         $("#info").html(contentstable);
     });
     if (animationLoaded) stopAnimation();
+    if(!isModelLoaded) loadModel();
 }
 
 function sortComponents(data) { //сортирует массив компонентов в иерархическом виде
@@ -119,12 +122,14 @@ async function showRequirements() { //показывает технически�
     $.get("http://localhost:3000/other", function (data) {
         $("#info").html(data[0].description);
     });
+    if(!isModelLoaded) loadModel();
 }
 
 async function showDiagnostic() { //показывает диагностику неисправностей
     $.get("http://localhost:3000/other", function (data) {
         $("#info").html(data[1].description);
     });
+    if(!isModelLoaded) loadModel();
 }
 
 async function addComment(name, text, procedure_id, date) {
@@ -246,6 +251,7 @@ async function showPartsAndTools() { //показывает инструмент
             $("#info").html(info);
         });
     });
+    if(!isModelLoaded) loadModel();
 }
 
 async function getProcedureTools(id) { //показывает инструменты и расходники на странице процедуры
@@ -301,7 +307,7 @@ async function showDocuments() { //показывает документы
     $.get("http://localhost:3000/documents", function (data) {
         let info = `<h2>Документы ИЭТР</h2><ul>`;
         for (let i = 0; i < data.length; i++) {
-            info += `<li><a href="javascript:void(0)" onclick="showDoc(` + data[i].doc + `)">` + data[i].name + `</a></li`;
+            info += `<li><a href="javascript:void(0)" onclick="showDoc('` + data[i].file + `')">` + data[i].name + `</a></li`;
         }
         info += `</ul>`;
         $("#info").html(info);
@@ -309,7 +315,9 @@ async function showDocuments() { //показывает документы
 }
 
 function showDoc(doc) {
-    $("#viewer").html(`<iframe src="` + doc + `" style="width:100%; height:100%;" frameborder="0"></iframe>`);
+    $("#viewer").html(`<iframe src="` + doc + `" width="100%" height="100%"></iframe>`);
+    console.log(doc)
+    isModelLoaded=false;
 }
 
 async function login(username, password) {
@@ -377,4 +385,11 @@ async function logout() {
         showEngineDescription();
         $("#logoutbutton").remove();
     });
+}
+
+async function showTechicalDescription() {
+    $.get("http://localhost:3000/other", function (data) {
+        $("#info").html(data[2].description);
+    });
+    if(!isModelLoaded) loadModel();
 }
