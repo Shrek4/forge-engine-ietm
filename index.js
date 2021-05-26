@@ -9,7 +9,7 @@ const FORGE_CLIENT_SECRET = "EDnxgAsO6jxL4rRc";
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
-const port = process.env.PORT || 3000;
+const port = 4015;
 
 const querystring = require('querystring');
 let access_token = '';
@@ -44,20 +44,9 @@ app.get('/oauth', function (req, res) {
 const os = require('os');
 const { default: axios } = require('axios');
 const { allowedNodeEnvironmentFlags } = require('process');
-function getIp() {
-    for (let key in os.networkInterfaces()) {
-        if (os.networkInterfaces()[key][1].address != undefined) return os.networkInterfaces()[key][1].address;
-    }
-}
-const ipAddress = getIp();
-
-app.get('/getIp', function (req, res) {
-    res.send(ipAddress);// Возможность узнать IP сервера
-});
 
 app.listen(port, () => {
     console.log('The app is running on  http://localhost:' + port);
-    console.log('Net address:  http://' + ipAddress + ':' + port);
 });
 
 let sqlite3 = require('sqlite3').verbose();
