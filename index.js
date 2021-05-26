@@ -41,10 +41,6 @@ app.get('/oauth', function (req, res) {
         });
 });
 
-const os = require('os');
-const { default: axios } = require('axios');
-const { allowedNodeEnvironmentFlags } = require('process');
-
 app.listen(port, () => {
     console.log('The app is running on  http://localhost:' + port);
 });
