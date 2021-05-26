@@ -58,7 +58,7 @@ function selectionPart() {
 
 function startAnimation(id) {
     loadAnimation(doc1, id);
-    timer = setInterval(animTick, 100);
+    timer = setInterval(animTick, 10);
 }
 
 function displayAnnotation(id) {
