@@ -48,6 +48,26 @@ body {
     body{
         grid-template-columns: auto;
     }
+    .adsk-viewing-viewer .adsk-button {
+        padding: 1px;
+    }
+    .adsk-toolbar .adsk-control-group{
+        margin: 0px;
+    }
+    #animationTools div{
+        margin:0px;
+        padding: 0px;
+    }
+    #animationTools div input{
+        margin:0px;
+        padding: 0px;
+    }
+    #toolbar-animationBackward{
+        display: none;
+    }
+    #toolbar-animationForward{
+        display: none;
+    }
 }
 
 .logo {

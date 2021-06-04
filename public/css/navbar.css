@@ -32,6 +32,13 @@
     margin-left: 50px;
 }
 
+#navbutton {
+    position: fixed;
+    right: 20px;
+    font-size:30px;
+    cursor:pointer;
+}
+
 @media screen and (max-height: 450px) {
     .sidenav {
         padding-top: 15px;
@@ -41,9 +48,12 @@
     }
 }
 
-#navbutton {
-    position: fixed;
-    right: 20px;
+@media only screen and (max-width: 1000px){
+    #navbutton{
+        font-size: 25px;
+        position: static;
+        float:right;
+    }
 }
 
 .sublist a {

@@ -50,29 +50,29 @@ async function showContents() { //показывает состав двигат
     <tbody>`;
 
         data = sortComponents(data);
-
-        for (let i = 0; i < data.length; i++) { //добавление строк таблицы в соответствии с иерархией
+        //добавление строк таблицы в соответствии с иерархией
+        for (let i = 0; i < data.length; i++) { //первый уровень иерархии
             contentstable += `<tr class="level1">
         <td><a href="javascript:viewer.isolate(` + data[i].node_ids + `)">` + data[i].name + `</a></td>
         <td>` + data[i].description + `</td>
         </tr>`
 
             if (data[i].children != undefined)
-                for (let j = 0; j < data[i].children.length; j++) {
+                for (let j = 0; j < data[i].children.length; j++) {//второй уровень иерархии
                     contentstable += `<tr class="level2">
                 <td><a href="javascript:viewer.isolate(` + data[i].children[j].node_ids + `)">` + data[i].children[j].name + `</a></td>
                 <td>` + data[i].children[j].description + `</td>
                 </tr>`;
 
 
-                    if (data[i].children[j].children != undefined)
+                    if (data[i].children[j].children != undefined)//третий уровень иерархии
                         for (let k = 0; k < data[i].children[j].children.length; k++) {
                             contentstable += `<tr class="level3">
                             <td><a href="javascript:viewer.isolate(` + data[i].children[j].children[k].node_ids + `)">` + data[i].children[j].children[k].name + `</a></td>
                             <td>` + data[i].children[j].children[k].description + `</td>
                             </tr>`;
 
-                            if (data[i].children[j].children[k].children != undefined)
+                            if (data[i].children[j].children[k].children != undefined)//четвёртый уровень иерархии
                                 for (let l = 0; l < data[i].children[j].children[k].children.length; l++) {
                                     contentstable += `<tr class="level4">
                                 <td padding="20px"><a href="javascript:viewer.isolate(` + data[i].children[j].children[k].children[l].node_ids + `)">` + data[i].children[j].children[k].children[l].name + `</a></td>

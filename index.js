@@ -47,7 +47,7 @@ app.listen(port, () => {
 
 let sqlite3 = require('sqlite3').verbose();
 
-// open the database
+//открытие базы данных
 let db = new sqlite3.Database('info.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
         console.error(err.message);
@@ -55,7 +55,7 @@ let db = new sqlite3.Database('info.db', sqlite3.OPEN_READWRITE, (err) => {
     console.log('Connected to the database.');
 });
 
-db.all("SELECT * FROM components", [], (err, rows) => {
+db.all("SELECT * FROM components", [], (err, rows) => {//получение компонентов
     if (err) {
         console.error(err.message);
     }
@@ -64,7 +64,7 @@ db.all("SELECT * FROM components", [], (err, rows) => {
     })
 });
 
-db.all("SELECT * FROM procedures", [], (err, rows) => {
+db.all("SELECT * FROM procedures", [], (err, rows) => {//получение процедур
     if (err) {
         console.error(err.message);
     }

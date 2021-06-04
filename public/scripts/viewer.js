@@ -1,7 +1,7 @@
 let viewer; //текущий вьювер
 let doc1; //текущий документ вьювера
-let isModelLoaded=true;
-let animationLoaded=false; //загружена ли анимация
+let isModelLoaded = true;
+let animationLoaded = false; //загружена ли анимация
 let currentAnimId; //текущий айди анимации
 //айди модели из models.autodesk.io
 let FORGE_MODEL_URN = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDIxLTA1LTExLTE3LTM0LTM1LWQ0MWQ4Y2Q5OGYwMGIyMDRlOTgwMDk5OGVjZjg0MjdlL3pldGVjJTIwZW5naW5lJTIwYW5pbWF0YWJsZSUyMHY0NC5mM2Q";
@@ -24,12 +24,13 @@ Autodesk.Viewing.Initializer(options, function () {
     loadModel();
 });
 
-function loadModel() {
-    $("#viewer").html(`<img src="../images/forge.png" class="logo"></img>`);
-    isModelLoaded=true;
+function loadModel() {//загружает модель без анимации
+    $("#viewer").html(`<img src="../images/forge.png" class="logo"></img>`);/*устанавливает изначальное содержимое блока, 
+        чтобы когда с документа обратно на 3д-модель переключаешься, логотип тоже был*/
+    isModelLoaded = true;
     const htmlDiv = document.getElementById("viewer");
     const config = {
-        extensions: ['Autodesk.Fusion360.Animation', 'Autodesk.NPR'],
+        extensions: ['Autodesk.Fusion360.Animation', 'Autodesk.NPR'],//тут подключаются расширения
         externals: { EventsEmitter: 'EventsEmmitter' }
     };
 
@@ -41,19 +42,18 @@ function loadModel() {
     }
 
     console.log("Initialization complete, loading a model next...");
-    viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (e) => {
-        // Функция, срабатывает после полной загрузки модели
+    viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (e) => {//срабатывает после загрузки модели
         viewer.setLightPreset(8);
     });
 
-    Autodesk.Viewing.Document.load(
+    Autodesk.Viewing.Document.load(//загружает документ
         FORGE_MODEL_URN,
         onDocumentLoadSuccess,
         onDocumentLoadFailure
     );
 }
 
-function loadAnimation(doc, id) {
+function loadAnimation(doc, id) {//загружает модель с анимацией под номером id
 
     var viewerDiv = document.getElementById('viewer');
     var config = {
@@ -70,31 +70,29 @@ function loadAnimation(doc, id) {
     let animationUrl = doc.getViewablePath(animations.children[id]);
 
     viewer.start(animationUrl, {}, onLoadModelSuccess2, onLoadModelError);
-    currentAnimId=id;
+    currentAnimId = id;
 }
 
 function onLoadModelSuccess(model) {
 
     viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, (e) => {
-        // Функция, срабатывает после полной загрузки модели
-        // onTimerTick();
+        //срабатывает после загрузки модели
     });
 
-    viewer.addEventListener(Autodesk.Viewing.ANIMATION_READY_EVENT, (e) => {
+    viewer.addEventListener(Autodesk.Viewing.ANIMATION_READY_EVENT, (e) => {//срабатывает после загрузки анимации
         animationExt = viewer.getExtension("Autodesk.Fusion360.Animation");
-        //checkSeconds();
     });
 }
 function onLoadModelSuccess2(model) {
 
     viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, (e) => {
-
+        //срабатывает после загрузки модели
     });
 
-    viewer.addEventListener(Autodesk.Viewing.ANIMATION_READY_EVENT, (e) => {
+    viewer.addEventListener(Autodesk.Viewing.ANIMATION_READY_EVENT, (e) => {//срабатывает после загрузки анимации
         animationExt = viewer.getExtension("Autodesk.Fusion360.Animation");
-        animationLoaded=true;
-        animationExt.play();
+        animationLoaded = true;
+        animationExt.play();//запуск анимации
     });
 }
 
@@ -105,17 +103,17 @@ function onLoadModelError(viewerErrorCode) {
 function onDocumentLoadSuccess(doc) {
     const defaultModel = doc.getRoot().getDefaultGeometry();
     viewer.loadDocumentNode(doc, defaultModel);
-    doc1=doc;
+    doc1 = doc;
 }
 
 function onDocumentLoadFailure() {
     console.error("Failed fetching Forge manifest");
 }
 
-function onViewerClick(){
-    if(document.getElementById('partdesc')) {
+function onViewerClick() {//обратотка кликов по деталям
+    if (document.getElementById('partdesc')) {
         let shrek = viewer.getSelection()[0];
-        if(shrek) {
+        if (shrek) {
             showPartDescription(shrek);
         }
     }
