@@ -1,5 +1,5 @@
 async function showPartDescription(id) { //показывает описание детали
-    $.get("http://localhost:3000/components", function (data) {
+    $.get("http://195.133.144.86:4015/components", function (data) {
         for (let i = 0; i < data.length; i++) { //поиск элемента, содержащего айди
             let nodeid = JSON.parse(data[i].node_ids);
             if (nodeid.includes(id)) {
@@ -11,7 +11,7 @@ async function showPartDescription(id) { //показывает описание
 }
 
 async function showEngineDescription() { //показывает описание двигателя
-    $.get("http://localhost:3000/components", function (data) {
+    $.get("http://195.133.144.86:4015/components", function (data) {
         $("#info").html(data[0].description);
     });
     if (animationLoaded) stopAnimation();
@@ -19,13 +19,13 @@ async function showEngineDescription() { //показывает описание
 }
 
 async function getAnnotations(id) { //берёт аннотации к анимации процедуры из БД
-    $.get("http://localhost:3000/procedures", function (data) {
+    $.get("http://195.133.144.86:4015/procedures", function (data) {
         annotations = JSON.parse(data[id].annotations);
     });
 }
 
 async function showProcedureDescription(id) { //показывает страницу процедуры
-    $.get("http://localhost:3000/procedures", function (data) {
+    $.get("http://195.133.144.86:4015/procedures", function (data) {
         let description = `<h1>` + data[id].proc_name + `</h1>`
         description += `<div id="tools"></div>`;
         description += data[id].description;
@@ -39,7 +39,7 @@ async function showProcedureDescription(id) { //показывает стран�
 }
 
 async function showContents() { //показывает состав двигателя
-    $.get("http://localhost:3000/components", function (data) {
+    $.get("http://195.133.144.86:4015/components", function (data) {
         let contentstable = `<table class="table contentstable">
     <thead class="thead-light">
       <tr>
@@ -106,7 +106,7 @@ function sortComponents(data) { //сортирует массив компоне
 }
 
 async function showProcedures() { //показывает список процедур в меню
-    $.get("http://localhost:3000/procedures", function (data) {
+    $.get("http://195.133.144.86:4015/procedures", function (data) {
         let mn = ``;
         let rep = ``;
         for (let i = 0; i < data.length; i++) {
@@ -119,14 +119,14 @@ async function showProcedures() { //показывает список проце
 }
 
 async function showRequirements() { //показывает технические требования
-    $.get("http://localhost:3000/other", function (data) {
+    $.get("http://195.133.144.86:4015/other", function (data) {
         $("#info").html(data[0].description);
     });
     if(!isModelLoaded) loadModel();
 }
 
 async function showDiagnostic() { //показывает диагностику неисправностей
-    $.get("http://localhost:3000/other", function (data) {
+    $.get("http://195.133.144.86:4015/other", function (data) {
         $("#info").html(data[1].description);
     });
     if(!isModelLoaded) loadModel();
@@ -145,7 +145,7 @@ async function addComment(name, text, procedure_id, date) {
 }
 
 async function showComments(id) {
-    $.get("http://localhost:3000/comments", async function (data) {
+    $.get("http://195.133.144.86:4015/comments", async function (data) {
         let curdata = data.filter(element => element.procedure_id - 1 == id);
         let current_user = await getCurrentUser();
 
@@ -205,7 +205,7 @@ function reply(name) {
 
 async function showPartsAndTools() { //показывает инструменты и расходники
     let info = ``;
-    $.get("http://localhost:3000/parts", function (data) {
+    $.get("http://195.133.144.86:4015/parts", function (data) {
         info += `<h1>Расходники</h1>
         <table class="table toolstable">
         <thead class="thead-light">
@@ -226,7 +226,7 @@ async function showPartsAndTools() { //показывает инструмент
         info += `</tbody></table>`;
 
     }).then(() => {
-        $.get("http://localhost:3000/tools", function (data) {
+        $.get("http://195.133.144.86:4015/tools", function (data) {
             info += `<h1>Инструменты</h1>
             <table class="table toolstable">
             <thead class="thead-light">
@@ -256,7 +256,7 @@ async function showPartsAndTools() { //показывает инструмент
 
 async function getProcedureTools(id) { //показывает инструменты и расходники на странице процедуры
     let info = `<h2>Вам понадобится:</h2>`;
-    $.get("http://localhost:3000/parts", function (data) {
+    $.get("http://195.133.144.86:4015/parts", function (data) {
         let data1 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) }); //фильтр расходников, связанных с процедурой
         if (data1.length != 0) {
             info += `<table class="table toolstable">
@@ -277,7 +277,7 @@ async function getProcedureTools(id) { //показывает инструмен
         }
 
     }).then(() => {
-        $.get("http://localhost:3000/tools", function (data) {
+        $.get("http://195.133.144.86:4015/tools", function (data) {
             let data2 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) }); //фильтр инструментов, связанных с процедурой
             if (data2.length != 0) {
                 info += `<table class="table toolstable">
@@ -304,7 +304,7 @@ async function getProcedureTools(id) { //показывает инструмен
 }
 
 async function showDocuments() { //показывает документы
-    $.get("http://localhost:3000/documents", function (data) {
+    $.get("http://195.133.144.86:4015/documents", function (data) {
         let info = `<h2>Документы ИЭТР</h2><ul>`;
         for (let i = 0; i < data.length; i++) {
             info += `<li><a href="javascript:void(0)" onclick="showDoc('` + data[i].file + `')">` + data[i].name + `</a></li`;
@@ -367,7 +367,7 @@ async function deleteComment(id, proc_id) {
 async function getCurrentUser() {
     let result;
     $.ajax({
-        url: "http://localhost:3000/currentuser",
+        url: "http://195.133.144.86:4015/currentuser",
         type: 'get',
         dataType: 'json',
         async: false,
@@ -379,7 +379,7 @@ async function getCurrentUser() {
 }
 
 async function logout() {
-    $.get("http://localhost:3000/logout", function (data) {
+    $.get("http://195.133.144.86:4015/logout", function (data) {
         $("#loginbutton").html("Войти");
         document.getElementById('id01').style.display = 'none';
         showEngineDescription();
@@ -388,7 +388,7 @@ async function logout() {
 }
 
 async function showTechicalDescription() {
-    $.get("http://localhost:3000/other", function (data) {
+    $.get("http://195.133.144.86:4015/other", function (data) {
         $("#info").html(data[2].description);
     });
     if(!isModelLoaded) loadModel();
