@@ -1,5 +1,7 @@
+const socket = "http://195.133.144.86:4015";
+
 async function showPartDescription(id) { //показывает описание детали
-    $.get("http://195.133.144.86:4015/components", function (data) {
+    $.get( socket + "/components", function (data) {
         for (let i = 0; i < data.length; i++) { //поиск элемента, содержащего айди
             let nodeid = JSON.parse(data[i].node_ids);
             if (nodeid.includes(id)) {
@@ -11,21 +13,21 @@ async function showPartDescription(id) { //показывает описание
 }
 
 async function showEngineDescription() { //показывает описание двигателя
-    $.get("http://195.133.144.86:4015/components", function (data) {
+    $.get( socket + "/components", function (data) {
         $("#info").html(data[0].description);
     });
     if (animationLoaded) stopAnimation();
-    if(!isModelLoaded) loadModel();
+    if (!isModelLoaded) loadModel();
 }
 
 async function getAnnotations(id) { //берёт аннотации к анимации процедуры из БД
-    $.get("http://195.133.144.86:4015/procedures", function (data) {
+    $.get( socket + "/procedures", function (data) {
         annotations = JSON.parse(data[id].annotations);
     });
 }
 
 async function showProcedureDescription(id) { //показывает страницу процедуры
-    $.get("http://195.133.144.86:4015/procedures", function (data) {
+    $.get( socket + "/procedures", function (data) {
         let description = `<h1>` + data[id].proc_name + `</h1>`
         description += `<div id="tools"></div>`;
         description += data[id].description;
@@ -34,13 +36,13 @@ async function showProcedureDescription(id) { //показывает стран�
         getAnnotations(id);
         getProcedureTools(id);
         showComments(id);
-        if(!isModelLoaded) loadModel();
+        if (!isModelLoaded) loadModel();
     });
 }
 
 async function showContents() { //показывает состав двигателя
-    $.get("http://195.133.144.86:4015/components", function (data) {
-        let contentstable = `<table class="table contentstable">
+    $.get( socket + "/components", function (data) {
+        let contentstable = `<div class="table-box"><table class="table contentstable">
     <thead class="thead-light">
       <tr>
         <th scope="col">Компонент</th>
@@ -84,12 +86,12 @@ async function showContents() { //показывает состав двигат
                 }
 
         };
-        contentstable += `</tbody></table>`;
+        contentstable += `</tbody></table></div>`;
 
         $("#info").html(contentstable);
     });
     if (animationLoaded) stopAnimation();
-    if(!isModelLoaded) loadModel();
+    if (!isModelLoaded) loadModel();
 }
 
 function sortComponents(data) { //сортирует массив компонентов в иерархическом виде
@@ -106,7 +108,7 @@ function sortComponents(data) { //сортирует массив компоне
 }
 
 async function showProcedures() { //показывает список процедур в меню
-    $.get("http://195.133.144.86:4015/procedures", function (data) {
+    $.get( socket + "/procedures", function (data) {
         let mn = ``;
         let rep = ``;
         for (let i = 0; i < data.length; i++) {
@@ -119,17 +121,17 @@ async function showProcedures() { //показывает список проце
 }
 
 async function showRequirements() { //показывает технические требования
-    $.get("http://195.133.144.86:4015/other", function (data) {
+    $.get( socket + "/other", function (data) {
         $("#info").html(data[0].description);
     });
-    if(!isModelLoaded) loadModel();
+    if (!isModelLoaded) loadModel();
 }
 
 async function showDiagnostic() { //показывает диагностику неисправностей
-    $.get("http://195.133.144.86:4015/other", function (data) {
+    $.get( socket + "/other", function (data) {
         $("#info").html(data[1].description);
     });
-    if(!isModelLoaded) loadModel();
+    if (!isModelLoaded) loadModel();
 }
 
 async function addComment(name, text, procedure_id, date) {
@@ -145,7 +147,7 @@ async function addComment(name, text, procedure_id, date) {
 }
 
 async function showComments(id) {
-    $.get("http://195.133.144.86:4015/comments", async function (data) {
+    $.get( socket + "/comments", async function (data) {
         let curdata = data.filter(element => element.procedure_id - 1 == id);
         let current_user = await getCurrentUser();
 
@@ -205,9 +207,9 @@ function reply(name) {
 
 async function showPartsAndTools() { //показывает инструменты и расходники
     let info = ``;
-    $.get("http://195.133.144.86:4015/parts", function (data) {
+    $.get( socket + "/parts", function (data) {
         info += `<h1>Расходники</h1>
-        <table class="table toolstable">
+        <div class="table-box"><table class="table toolstable">
         <thead class="thead-light">
           <tr>
             <th scope="col">Расходник</th>
@@ -223,12 +225,12 @@ async function showPartsAndTools() { //показывает инструмент
             <td>`+ data[i].description + `</td>
             </tr>`;
         }
-        info += `</tbody></table>`;
+        info += `</tbody></table></div>`;
 
     }).then(() => {
-        $.get("http://195.133.144.86:4015/tools", function (data) {
+        $.get( socket + "/tools", function (data) {
             info += `<h1>Инструменты</h1>
-            <table class="table toolstable">
+            <div class="table-box"><table class="table toolstable">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Инструмент</th>
@@ -246,17 +248,17 @@ async function showPartsAndTools() { //показывает инструмент
                 </tr>`;
             }
 
-            info += `</tbody></table>`;
+            info += `</tbody></table></div>`;
 
             $("#info").html(info);
         });
     });
-    if(!isModelLoaded) loadModel();
+    if (!isModelLoaded) loadModel();
 }
 
 async function getProcedureTools(id) { //показывает инструменты и расходники на странице процедуры
     let info = `<h2>Вам понадобится:</h2>`;
-    $.get("http://195.133.144.86:4015/parts", function (data) {
+    $.get( socket + "/parts", function (data) {
         let data1 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) }); //фильтр расходников, связанных с процедурой
         if (data1.length != 0) {
             info += `<table class="table toolstable">
@@ -277,7 +279,7 @@ async function getProcedureTools(id) { //показывает инструмен
         }
 
     }).then(() => {
-        $.get("http://195.133.144.86:4015/tools", function (data) {
+        $.get( socket + "/tools", function (data) {
             let data2 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) }); //фильтр инструментов, связанных с процедурой
             if (data2.length != 0) {
                 info += `<table class="table toolstable">
@@ -304,7 +306,7 @@ async function getProcedureTools(id) { //показывает инструмен
 }
 
 async function showDocuments() { //показывает документы
-    $.get("http://195.133.144.86:4015/documents", function (data) {
+    $.get( socket + "/documents", function (data) {
         let info = `<h2>Документы ИЭТР</h2><ul>`;
         for (let i = 0; i < data.length; i++) {
             info += `<li><a href="javascript:void(0)" onclick="showDoc('` + data[i].file + `')">` + data[i].name + `</a></li`;
@@ -317,7 +319,7 @@ async function showDocuments() { //показывает документы
 function showDoc(doc) {
     $("#viewer").html(`<iframe src="` + doc + `" width="100%" height="100%"></iframe>`);
     console.log(doc)
-    isModelLoaded=false;
+    isModelLoaded = false;
 }
 
 async function login(username, password) {
@@ -367,7 +369,7 @@ async function deleteComment(id, proc_id) {
 async function getCurrentUser() {
     let result;
     $.ajax({
-        url: "http://195.133.144.86:4015/currentuser",
+        url:  socket + "/currentuser",
         type: 'get',
         dataType: 'json',
         async: false,
@@ -379,7 +381,7 @@ async function getCurrentUser() {
 }
 
 async function logout() {
-    $.get("http://195.133.144.86:4015/logout", function (data) {
+    $.get( socket + "/logout", function (data) {
         $("#loginbutton").html("Войти");
         document.getElementById('id01').style.display = 'none';
         showEngineDescription();
@@ -388,8 +390,33 @@ async function logout() {
 }
 
 async function showTechicalDescription() {
-    $.get("http://195.133.144.86:4015/other", function (data) {
+    $.get( socket + "/other", function (data) {
         $("#info").html(data[2].description);
     });
-    if(!isModelLoaded) loadModel();
+    if (!isModelLoaded) loadModel();
+}
+
+async function showUsers() {
+    $.post({
+        traditional: true,
+        url: '/getUsers',
+        contentType: 'application/json',
+        data: {},
+        dataType: 'html',
+        success: function (response) { console.log(response); },
+        error: function (error) { console.log("Войдите под учётной записью администратора"); }
+    });
+}
+
+async function removeUser(id) {
+    let data = { id: id };
+    $.post({
+        traditional: true,
+        url: '/removeUser',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        dataType: 'html',
+        success: function (response) { console.log("Пользователь удалён"); },
+        error: function (error) { console.log("Войдите под учётной записью администратора"); }
+    });
 }
