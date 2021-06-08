@@ -42,7 +42,7 @@ app.get('/oauth', function (req, res) {
 });
 
 app.listen(port, () => {
-    console.log('The app is running on  http://localhost:' + port);
+    console.log('The app is running on  http://195.133.144.86:' + port);
 });
 
 let sqlite3 = require('sqlite3').verbose();
