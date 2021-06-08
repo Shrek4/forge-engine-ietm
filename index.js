@@ -47,6 +47,11 @@ app.listen(port, () => {
 
 let sqlite3 = require('sqlite3').verbose();
 
+app.use(clientSessions({//настройки клиентских сессий
+    secret: '5hR3k1sL0v35hR3k1sL1f3',
+    duration: 60 * 60 * 1000
+}));
+
 //открытие базы данных
 let db = new sqlite3.Database('info.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
@@ -82,10 +87,6 @@ db.all("SELECT * FROM other", [], (err, rows) => {
     })
 });
 
-app.get('/comments', function (req, res) {
-    processData(res, "SELECT * FROM comments");
-});
-
 db.all("SELECT * FROM parts", [], (err, rows) => {
     if (err) {
         console.error(err.message);
@@ -111,6 +112,10 @@ db.all("SELECT * FROM documents", [], (err, rows) => {
     app.get('/documents', function (req, res) {
         res.send(rows);
     })
+});
+
+app.get('/comments', function (req, res) {
+    processData(res, "SELECT * FROM comments");
 });
 
 app.post('/addComment', function (req, res) {
@@ -143,11 +148,6 @@ function sendData(res, data, err) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.send(data);
 }
-
-app.use(clientSessions({
-    secret: '5hR3k1sL0v35hR3k1sL1f3',
-    duration: 60 * 60 * 1000
-}));
 
 app.post('/register', function (req, res) {
     if (req.body.password === req.body.repeatpassword) {
@@ -226,4 +226,29 @@ app.post('/deletecomment', function (req, res) {
             });
         });
     });
+});
+
+app.post('/getUsers', function (req, res) {//получение списка пользователей
+    if (req.session_state.admin == 1) {
+        db.all("SELECT * FROM users", [], (err, rows) => {
+            if (err) {
+                console.error(err.message);
+            }
+            res.send(rows);
+        });
+    }
+    else res.sendStatus(400);
+});
+
+app.post('/removeUser', function (req, res) {//удаление пользователя
+    if (req.session_state.admin == 1) {
+        db.all(`DELETE FROM users WHERE id = ?`, [req.body.id], (err, rows) => {
+            if (err) {
+                return console.log(err.message);
+            }
+            console.log("Removed user: " + req.body.id);
+            res.send();
+        });
+    }
+    else res.sendStatus(400);
 });

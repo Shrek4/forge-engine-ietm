@@ -15,7 +15,7 @@ async function showEngineDescription() { //показывает описание
         $("#info").html(data[0].description);
     });
     if (animationLoaded) stopAnimation();
-    if(!isModelLoaded) loadModel();
+    if (!isModelLoaded) loadModel();
 }
 
 async function getAnnotations(id) { //берёт аннотации к анимации процедуры из БД
@@ -34,13 +34,13 @@ async function showProcedureDescription(id) { //показывает стран�
         getAnnotations(id);
         getProcedureTools(id);
         showComments(id);
-        if(!isModelLoaded) loadModel();
+        if (!isModelLoaded) loadModel();
     });
 }
 
 async function showContents() { //показывает состав двигателя
     $.get("http://localhost:3000/components", function (data) {
-        let contentstable = `<table class="table contentstable">
+        let contentstable = `<div class="table-box"><table class="table contentstable">
     <thead class="thead-light">
       <tr>
         <th scope="col">Компонент</th>
@@ -84,12 +84,12 @@ async function showContents() { //показывает состав двигат
                 }
 
         };
-        contentstable += `</tbody></table>`;
+        contentstable += `</tbody></table></div>`;
 
         $("#info").html(contentstable);
     });
     if (animationLoaded) stopAnimation();
-    if(!isModelLoaded) loadModel();
+    if (!isModelLoaded) loadModel();
 }
 
 function sortComponents(data) { //сортирует массив компонентов в иерархическом виде
@@ -122,14 +122,14 @@ async function showRequirements() { //показывает технически�
     $.get("http://localhost:3000/other", function (data) {
         $("#info").html(data[0].description);
     });
-    if(!isModelLoaded) loadModel();
+    if (!isModelLoaded) loadModel();
 }
 
 async function showDiagnostic() { //показывает диагностику неисправностей
     $.get("http://localhost:3000/other", function (data) {
         $("#info").html(data[1].description);
     });
-    if(!isModelLoaded) loadModel();
+    if (!isModelLoaded) loadModel();
 }
 
 async function addComment(name, text, procedure_id, date) {
@@ -207,7 +207,7 @@ async function showPartsAndTools() { //показывает инструмент
     let info = ``;
     $.get("http://localhost:3000/parts", function (data) {
         info += `<h1>Расходники</h1>
-        <table class="table toolstable">
+        <div class="table-box"><table class="table toolstable">
         <thead class="thead-light">
           <tr>
             <th scope="col">Расходник</th>
@@ -223,12 +223,12 @@ async function showPartsAndTools() { //показывает инструмент
             <td>`+ data[i].description + `</td>
             </tr>`;
         }
-        info += `</tbody></table>`;
+        info += `</tbody></table></div>`;
 
     }).then(() => {
         $.get("http://localhost:3000/tools", function (data) {
             info += `<h1>Инструменты</h1>
-            <table class="table toolstable">
+            <div class="table-box"><table class="table toolstable">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Инструмент</th>
@@ -246,12 +246,12 @@ async function showPartsAndTools() { //показывает инструмент
                 </tr>`;
             }
 
-            info += `</tbody></table>`;
+            info += `</tbody></table></div>`;
 
             $("#info").html(info);
         });
     });
-    if(!isModelLoaded) loadModel();
+    if (!isModelLoaded) loadModel();
 }
 
 async function getProcedureTools(id) { //показывает инструменты и расходники на странице процедуры
@@ -317,7 +317,7 @@ async function showDocuments() { //показывает документы
 function showDoc(doc) {
     $("#viewer").html(`<iframe src="` + doc + `" width="100%" height="100%"></iframe>`);
     console.log(doc)
-    isModelLoaded=false;
+    isModelLoaded = false;
 }
 
 async function login(username, password) {
@@ -391,5 +391,30 @@ async function showTechicalDescription() {
     $.get("http://localhost:3000/other", function (data) {
         $("#info").html(data[2].description);
     });
-    if(!isModelLoaded) loadModel();
+    if (!isModelLoaded) loadModel();
+}
+
+async function showUsers() {
+    $.post({
+        traditional: true,
+        url: '/getUsers',
+        contentType: 'application/json',
+        data: {},
+        dataType: 'html',
+        success: function (response) { console.log(response); },
+        error: function (error) { console.log("Войдите под учётной записью администратора"); }
+    });
+}
+
+async function removeUser(id) {
+    let data = { id: id };
+    $.post({
+        traditional: true,
+        url: '/removeUser',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        dataType: 'html',
+        success: function (response) { console.log("Пользователь удалён"); },
+        error: function (error) { console.log("Войдите под учётной записью администратора"); }
+    });
 }

@@ -35,6 +35,8 @@ function loadModel() {//загружает модель без анимации
     };
 
     viewer = new Autodesk.Viewing.GuiViewer3D(htmlDiv, config);
+    viewer.setProgressiveRendering(false); //отключает активное отображение
+    
     const startedCode = viewer.start();
     if (startedCode > 0) {
         console.error("Failed to create a Viewer: WebGL not supported.");
@@ -63,6 +65,7 @@ function loadAnimation(doc, id) {//загружает модель с анима
 
     // Create the Viewer 3D instance with default UI
     viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, config);
+    viewer.setProgressiveRendering(false); //отключает активное отображение
 
     let animationsFolder = doc.getRoot().search({ 'type': 'folder', 'role': 'animation' });
     let animations = animationsFolder[0];
