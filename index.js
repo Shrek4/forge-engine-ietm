@@ -15,6 +15,13 @@ const querystring = require('querystring');
 let access_token = '';
 const scopes = 'data:read data:write data:create bucket:create bucket:read';
 
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://manual.mpu-cloud.ru/");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Credentials", true);
+    next();
+});
+
 app.get('/oauth', function (req, res) {
     Axios({
         method: 'POST',
@@ -49,7 +56,10 @@ let sqlite3 = require('sqlite3').verbose();
 
 app.use(clientSessions({//настройки клиентских сессий
     secret: '5hR3k1sL0v35hR3k1sL1f3',
-    duration: 60 * 60 * 1000
+    duration: 60 * 60 * 1000,
+    cookie: {
+
+    }
 }));
 
 //открытие базы данных

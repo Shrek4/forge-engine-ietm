@@ -24,12 +24,13 @@ body {
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 3;
+    padding-top: 40px;
 }
 
-.print-doc{
-    width:30px;
-    cursor:pointer;
-    margin:5px;
+.print-doc {
+    width: 30px;
+    cursor: pointer;
+    margin: 5px;
 }
 
 @media only screen and (max-width: 1000px) {
@@ -43,6 +44,7 @@ body {
         overflow: scroll;
         overflow-x: hidden;
         scroll-behavior: smooth;
+        padding-top: 0px;
     }
     #viewer {
         position: relative;
@@ -51,27 +53,27 @@ body {
         grid-row-start: 1;
         grid-row-end: 2;
     }
-    body{
+    body {
         grid-template-columns: auto;
     }
     .adsk-viewing-viewer .adsk-button {
         padding: 1px;
     }
-    .adsk-toolbar .adsk-control-group{
+    .adsk-toolbar .adsk-control-group {
         margin: 0px;
     }
-    #animationTools div{
-        margin:0px;
+    #animationTools div {
+        margin: 0px;
         padding: 0px;
     }
-    #animationTools div input{
-        margin:0px;
+    #animationTools div input {
+        margin: 0px;
         padding: 0px;
     }
-    #toolbar-animationBackward{
+    #toolbar-animationBackward {
         display: none;
     }
-    #toolbar-animationForward{
+    #toolbar-animationForward {
         display: none;
     }
 }
@@ -85,7 +87,6 @@ body {
         grid-template-rows: 60% 40%;
         font-family: "Open Sans", sans-serif;
     }
-    
     #viewer {
         position: relative;
         grid-column-start: 1;
@@ -93,7 +94,6 @@ body {
         grid-row-start: 1;
         grid-row-end: 3;
     }
-    
     #sidebar {
         padding: 10px;
         overflow: scroll;
@@ -103,13 +103,11 @@ body {
         grid-row-start: 1;
         grid-row-end: 3;
     }
-
-    .print-doc{
+    .print-doc {
         width: 20px;
     }
-
-    #loginbutton{
-        width:60px;
+    #loginbutton {
+        width: 60px;
         padding: 2px;
     }
 }
@@ -153,7 +151,7 @@ table a {
     font-weight: bold;
 }
 
-.table-box{
+.table-box {
     overflow-x: scroll;
 }
 

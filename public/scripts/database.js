@@ -261,7 +261,7 @@ async function getProcedureTools(id) { //показывает инструмен
     $.get( socket + "/parts", function (data) {
         let data1 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) }); //фильтр расходников, связанных с процедурой
         if (data1.length != 0) {
-            info += `<table class="table toolstable">
+            info += `<div class="table-box"><table class="table toolstable">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Расходник</th>
@@ -275,14 +275,14 @@ async function getProcedureTools(id) { //показывает инструмен
                 <td>`+ data1[i].image + `</td>
                 </tr>`;
             }
-            info += `</tbody></table>`;
+            info += `</tbody></table></div>`;
         }
 
     }).then(() => {
         $.get( socket + "/tools", function (data) {
             let data2 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) }); //фильтр инструментов, связанных с процедурой
             if (data2.length != 0) {
-                info += `<table class="table toolstable">
+                info += `<div class="table-box"><table class="table toolstable">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Инструмент</th>
@@ -298,7 +298,7 @@ async function getProcedureTools(id) { //показывает инструмен
                 </tr>`;
                 }
 
-                info += `</tbody></table>`;
+                info += `</tbody></table></div>`;
             }
             $("#tools").html(info);
         });

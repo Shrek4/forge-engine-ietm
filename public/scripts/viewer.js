@@ -35,7 +35,6 @@ function loadModel() {//загружает модель без анимации
     };
 
     viewer = new Autodesk.Viewing.GuiViewer3D(htmlDiv, config);
-    viewer.setProgressiveRendering(false); //отключает активное отображение
     
     const startedCode = viewer.start();
     if (startedCode > 0) {
@@ -65,7 +64,6 @@ function loadAnimation(doc, id) {//загружает модель с анима
 
     // Create the Viewer 3D instance with default UI
     viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, config);
-    viewer.setProgressiveRendering(false); //отключает активное отображение
 
     let animationsFolder = doc.getRoot().search({ 'type': 'folder', 'role': 'animation' });
     let animations = animationsFolder[0];
@@ -84,6 +82,7 @@ function onLoadModelSuccess(model) {
 
     viewer.addEventListener(Autodesk.Viewing.ANIMATION_READY_EVENT, (e) => {//срабатывает после загрузки анимации
         animationExt = viewer.getExtension("Autodesk.Fusion360.Animation");
+        viewer.setProgressiveRendering(false); //отключает активное отображение
     });
 }
 function onLoadModelSuccess2(model) {
@@ -96,6 +95,7 @@ function onLoadModelSuccess2(model) {
         animationExt = viewer.getExtension("Autodesk.Fusion360.Animation");
         animationLoaded = true;
         animationExt.play();//запуск анимации
+        viewer.setProgressiveRendering(false); //отключает активное отображение
     });
 }
 
