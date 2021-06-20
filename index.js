@@ -9,14 +9,14 @@ const FORGE_CLIENT_SECRET = "EDnxgAsO6jxL4rRc";
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
-const port = 80;
+const port = 3000;
 
 const querystring = require('querystring');
 let access_token = '';
 const scopes = 'data:read data:write data:create bucket:create bucket:read';
 
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "https://forge-ietm.herokuapp.com/");
+    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Credentials", true);
     next();
@@ -56,10 +56,7 @@ let sqlite3 = require('sqlite3').verbose();
 
 app.use(clientSessions({//настройки клиентских сессий
     secret: '5hR3k1sL0v35hR3k1sL1f3',
-    duration: 60 * 60 * 1000,
-    cookie: {
-
-    }
+    duration: 60 * 60 * 1000
 }));
 
 //открытие базы данных
