@@ -1,4 +1,4 @@
-const socket = "http://localhost:3000";
+const socket = "https://forge-ietm.herokuapp.com/";
 
 async function showPartDescription(id) { //показывает описание детали
     $.get( socket + "/components", function (data) {
