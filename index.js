@@ -9,14 +9,14 @@ const FORGE_CLIENT_SECRET = "EDnxgAsO6jxL4rRc";
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
-const port = process.env.PORT || 3000;
+const port = 80;
 
 const querystring = require('querystring');
 let access_token = '';
 const scopes = 'data:read data:write data:create bucket:create bucket:read';
 
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://manual.mpu-cloud.ru/");
+    res.header("Access-Control-Allow-Origin", "https://forge-ietm.herokuapp.com/");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Credentials", true);
     next();
