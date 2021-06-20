@@ -9,7 +9,7 @@ const FORGE_CLIENT_SECRET = "EDnxgAsO6jxL4rRc";
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const querystring = require('querystring');
 let access_token = '';
