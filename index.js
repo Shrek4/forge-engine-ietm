@@ -16,11 +16,16 @@ let access_token = '';
 const scopes = 'data:read data:write data:create bucket:create bucket:read';
 
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://manual.mpu-cloud.ru/");
+    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Credentials", true);
     next();
 });
+
+app.use(cors({
+    origin : "http://manual.mpu-cloud.ru/",
+    credentials: true,
+  }))
 
 app.get('/oauth', function (req, res) {
     Axios({
