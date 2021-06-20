@@ -1,5 +1,6 @@
 const express = require('express')
 const Axios = require('axios');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const clientSessions = require("client-sessions");
@@ -9,7 +10,7 @@ const FORGE_CLIENT_SECRET = "EDnxgAsO6jxL4rRc";
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
-const port = 4015;
+const port = 3000;
 
 const querystring = require('querystring');
 let access_token = '';
