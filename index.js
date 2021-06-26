@@ -15,14 +15,15 @@ const querystring = require('querystring');
 let access_token = '';
 const scopes = 'data:read data:write data:create bucket:create bucket:read';
 
+//Заголовки для CORS
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://manual.mpu-cloud.ru/");
+    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Credentials", true);
     next();
 });
 
-app.get('/oauth', function (req, res) {
+app.get('/oauth', function (req, res) {//авторизация в Forge
     Axios({
         method: 'POST',
         url: 'https://developer.api.autodesk.com/authentication/v1/authenticate',
