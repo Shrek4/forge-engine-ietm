@@ -204,7 +204,7 @@ app.post(`/login`, function (req, res) {
     });
 });
 
-let isValidPassword = function (user, password) {
+let isValidPassword = function (user, password) {//проверка пароля
     return bcrypt.compareSync(password, user.password);
 }
 app.get('/currentuser', function (req, res) {
