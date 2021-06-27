@@ -134,7 +134,7 @@ async function showDiagnostic() { //показывает диагностику 
     if (!isModelLoaded) loadModel();
 }
 
-async function addComment(name, text, procedure_id, date) {
+async function addComment(name, text, procedure_id, date) {//добавить комментарий
     let data = { name: name, text: text, procedure_id: procedure_id, date: date };
     $.post({
         traditional: true,
@@ -146,11 +146,12 @@ async function addComment(name, text, procedure_id, date) {
     });
 }
 
-async function showComments(id) {
+async function showComments(id) {//показать комментарии
     $.get( socket + "/comments", async function (data) {
         let curdata = data.filter(element => element.procedure_id - 1 == id);
         let current_user = await getCurrentUser();
 
+        //комментарий
         let comments = `<div class="comments">
         <h3 class="title-comments">Комментарии</h3>`
         if (curdata.length != 0) {
@@ -178,6 +179,7 @@ async function showComments(id) {
         }
         else comments += `</div>`
 
+        //форма ввода
         if (current_user.username != undefined) {
             comments += `<form id="commentform">
             <label for="name">Ваше имя:</label><br>
@@ -201,7 +203,7 @@ async function showComments(id) {
     });
 }
 
-function reply(name) {
+function reply(name) {//ответить на комментарий
     $('#inputtext').val('<b>' + name + ',</b> ');
 }
 
@@ -322,7 +324,7 @@ function showDoc(doc) {
     isModelLoaded = false;
 }
 
-async function login(username, password) {
+async function login(username, password) {//авторизация
     let data = { username: username, password: password };
     $.post({
         traditional: true,
@@ -342,7 +344,7 @@ async function login(username, password) {
     });
 }
 
-async function register(username, password, repeatPassword) {
+async function register(username, password, repeatPassword) {//регистрация
     let data = { username: username, password: password, repeatpassword: repeatPassword };
     $.post({
         traditional: true,
@@ -355,7 +357,7 @@ async function register(username, password, repeatPassword) {
     });
 }
 
-async function deleteComment(id, proc_id) {
+async function deleteComment(id, proc_id) {//удалить комментарий
     $.post({
         traditional: true,
         url: '/deletecomment',
@@ -366,7 +368,7 @@ async function deleteComment(id, proc_id) {
     });
 }
 
-async function getCurrentUser() {
+async function getCurrentUser() {//получает текущего пользователя
     let result;
     $.ajax({
         url:  socket + "/currentuser",
@@ -380,7 +382,7 @@ async function getCurrentUser() {
     return { username: result.username, isadmin: result.isadmin };
 }
 
-async function logout() {
+async function logout() {//выход из уч. записи
     $.get( socket + "/logout", function (data) {
         $("#loginbutton").html("Войти");
         document.getElementById('id01').style.display = 'none';
@@ -396,7 +398,7 @@ async function showTechicalDescription() {
     if (!isModelLoaded) loadModel();
 }
 
-async function showUsers() {
+async function showUsers() {//получает список пользователей
     $.post({
         traditional: true,
         url: '/getUsers',
@@ -408,7 +410,7 @@ async function showUsers() {
     });
 }
 
-async function removeUser(id) {
+async function removeUser(id) {//удалить пользователя
     let data = { id: id };
     $.post({
         traditional: true,

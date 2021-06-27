@@ -149,7 +149,7 @@ function viewerMouseMove() {
 
 }
 
-function animTick() {
+function animTick() {//срабатывает во время анимации
     if (animationLoaded) {
         let animExt = viewer.getExtension("Autodesk.Fusion360.Animation");
 
@@ -201,7 +201,7 @@ registerform.onsubmit = function (event) {
 }
 
 checkUser();
-async function checkUser() {
+async function checkUser() {//проверяет, авторизован ли пользователь
     let user = await getCurrentUser();
     if (user.username != undefined) {
         $("#loginbutton").html(user.username);

@@ -74,7 +74,7 @@ function loadAnimation(doc, id) {//загружает модель с анима
     currentAnimId = id;
 }
 
-function onLoadModelSuccess(model) {
+function onLoadModelSuccess(model) {//загрузка модели без анимации
 
     viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, (e) => {
         //срабатывает после загрузки модели
@@ -85,7 +85,7 @@ function onLoadModelSuccess(model) {
         viewer.setProgressiveRendering(false); //отключает активное отображение
     });
 }
-function onLoadModelSuccess2(model) {
+function onLoadModelSuccess2(model) {//загрузка модели с анимацией
 
     viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, (e) => {
         //срабатывает после загрузки модели
