@@ -1,7 +1,7 @@
-const socket = "https://forge-ietm.herokuapp.com";
+const socket = "https://forge-ietm.herokuapp.com/";
 
 async function showPartDescription(id) { //показывает описание детали
-    $.get( socket + "/components", function (data) {
+    $.get(socket + "/components", function (data) {
         for (let i = 0; i < data.length; i++) { //поиск элемента, содержащего айди
             let nodeid = JSON.parse(data[i].node_ids);
             if (nodeid.includes(id)) {
@@ -13,7 +13,7 @@ async function showPartDescription(id) { //показывает описание
 }
 
 async function showEngineDescription() { //показывает описание двигателя
-    $.get( socket + "/components", function (data) {
+    $.get(socket + "/components", function (data) {
         $("#info").html(data[0].description);
     });
     if (animationLoaded) stopAnimation();
@@ -21,13 +21,13 @@ async function showEngineDescription() { //показывает описание
 }
 
 async function getAnnotations(id) { //берёт аннотации к анимации процедуры из БД
-    $.get( socket + "/procedures", function (data) {
+    $.get(socket + "/procedures", function (data) {
         annotations = JSON.parse(data[id].annotations);
     });
 }
 
 async function showProcedureDescription(id) { //показывает страницу процедуры
-    $.get( socket + "/procedures", function (data) {
+    $.get(socket + "/procedures", function (data) {
         let description = `<h1>` + data[id].proc_name + `</h1>`
         description += `<div id="tools"></div>`;
         description += data[id].description;
@@ -41,7 +41,7 @@ async function showProcedureDescription(id) { //показывает стран�
 }
 
 async function showContents() { //показывает состав двигателя
-    $.get( socket + "/components", function (data) {
+    $.get(socket + "/components", function (data) {
         let contentstable = `<div class="table-box"><table class="table contentstable">
     <thead class="thead-light">
       <tr>
@@ -108,7 +108,7 @@ function sortComponents(data) { //сортирует массив компоне
 }
 
 async function showProcedures() { //показывает список процедур в меню
-    $.get( socket + "/procedures", function (data) {
+    $.get(socket + "/procedures", function (data) {
         let mn = ``;
         let rep = ``;
         for (let i = 0; i < data.length; i++) {
@@ -121,20 +121,20 @@ async function showProcedures() { //показывает список проце
 }
 
 async function showRequirements() { //показывает технические требования
-    $.get( socket + "/other", function (data) {
+    $.get(socket + "/other", function (data) {
         $("#info").html(data[0].description);
     });
     if (!isModelLoaded) loadModel();
 }
 
 async function showDiagnostic() { //показывает диагностику неисправностей
-    $.get( socket + "/other", function (data) {
+    $.get(socket + "/other", function (data) {
         $("#info").html(data[1].description);
     });
     if (!isModelLoaded) loadModel();
 }
 
-async function addComment(name, text, procedure_id, date) {
+async function addComment(name, text, procedure_id, date) {//добавить комментарий
     let data = { name: name, text: text, procedure_id: procedure_id, date: date };
     $.post({
         traditional: true,
@@ -146,11 +146,12 @@ async function addComment(name, text, procedure_id, date) {
     });
 }
 
-async function showComments(id) {
-    $.get( socket + "/comments", async function (data) {
+async function showComments(id) {//показать комментарии
+    $.get(socket + "/comments", async function (data) {
         let curdata = data.filter(element => element.procedure_id - 1 == id);
         let current_user = await getCurrentUser();
 
+        //комментарий
         let comments = `<div class="comments">
         <h3 class="title-comments">Комментарии</h3>`
         if (curdata.length != 0) {
@@ -178,6 +179,7 @@ async function showComments(id) {
         }
         else comments += `</div>`
 
+        //форма ввода
         if (current_user.username != undefined) {
             comments += `<form id="commentform">
             <label for="name">Ваше имя:</label><br>
@@ -201,13 +203,13 @@ async function showComments(id) {
     });
 }
 
-function reply(name) {
+function reply(name) {//ответить на комментарий
     $('#inputtext').val('<b>' + name + ',</b> ');
 }
 
 async function showPartsAndTools() { //показывает инструменты и расходники
     let info = ``;
-    $.get( socket + "/parts", function (data) {
+    $.get(socket + "/parts", function (data) {
         info += `<h1>Расходники</h1>
         <div class="table-box"><table class="table toolstable">
         <thead class="thead-light">
@@ -228,7 +230,7 @@ async function showPartsAndTools() { //показывает инструмент
         info += `</tbody></table></div>`;
 
     }).then(() => {
-        $.get( socket + "/tools", function (data) {
+        $.get(socket + "/tools", function (data) {
             info += `<h1>Инструменты</h1>
             <div class="table-box"><table class="table toolstable">
             <thead class="thead-light">
@@ -258,7 +260,7 @@ async function showPartsAndTools() { //показывает инструмент
 
 async function getProcedureTools(id) { //показывает инструменты и расходники на странице процедуры
     let info = `<h2>Вам понадобится:</h2>`;
-    $.get( socket + "/parts", function (data) {
+    $.get(socket + "/parts", function (data) {
         let data1 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) }); //фильтр расходников, связанных с процедурой
         if (data1.length != 0) {
             info += `<div class="table-box"><table class="table toolstable">
@@ -279,7 +281,7 @@ async function getProcedureTools(id) { //показывает инструмен
         }
 
     }).then(() => {
-        $.get( socket + "/tools", function (data) {
+        $.get(socket + "/tools", function (data) {
             let data2 = data.filter((val) => { return JSON.parse(val.procedure_ids).includes(id + 1) }); //фильтр инструментов, связанных с процедурой
             if (data2.length != 0) {
                 info += `<div class="table-box"><table class="table toolstable">
@@ -306,7 +308,7 @@ async function getProcedureTools(id) { //показывает инструмен
 }
 
 async function showDocuments() { //показывает документы
-    $.get( socket + "/documents", function (data) {
+    $.get(socket + "/documents", function (data) {
         let info = `<h2>Документы ИЭТР</h2><ul>`;
         for (let i = 0; i < data.length; i++) {
             info += `<li><a href="javascript:void(0)" onclick="showDoc('` + data[i].file + `')">` + data[i].name + `</a></li`;
@@ -322,8 +324,9 @@ function showDoc(doc) {
     isModelLoaded = false;
 }
 
-async function login(username, password) {
+async function login(username, password) {//авторизация
     let data = { username: username, password: password };
+    let user = await getCurrentUser();
     $.post({
         traditional: true,
         url: '/login',
@@ -334,7 +337,7 @@ async function login(username, password) {
             $("#loginbutton").html(response);
             showEngineDescription();
             document.getElementById('id01').style.display = 'none';
-            $("#logout").append(`<button id="logoutbutton" type="button" onclick="logout()" class="cancelbtn btn btn-secondary">Выйти</button>`)
+            if (user.username == undefined) $("#logout").append(`<button id="logoutbutton" type="button" onclick="logout()" class="cancelbtn btn btn-secondary">Выйти</button>`)
         },
         error: function (error) {
             alert("Неправильный логин или пароль");
@@ -342,7 +345,7 @@ async function login(username, password) {
     });
 }
 
-async function register(username, password, repeatPassword) {
+async function register(username, password, repeatPassword) {//регистрация
     let data = { username: username, password: password, repeatpassword: repeatPassword };
     $.post({
         traditional: true,
@@ -355,7 +358,7 @@ async function register(username, password, repeatPassword) {
     });
 }
 
-async function deleteComment(id, proc_id) {
+async function deleteComment(id, proc_id) {//удалить комментарий
     $.post({
         traditional: true,
         url: '/deletecomment',
@@ -366,10 +369,10 @@ async function deleteComment(id, proc_id) {
     });
 }
 
-async function getCurrentUser() {
+async function getCurrentUser() {//получает текущего пользователя
     let result;
     $.ajax({
-        url:  socket + "/currentuser",
+        url: socket + "/currentuser",
         type: 'get',
         dataType: 'json',
         async: false,
@@ -380,8 +383,8 @@ async function getCurrentUser() {
     return { username: result.username, isadmin: result.isadmin };
 }
 
-async function logout() {
-    $.get( socket + "/logout", function (data) {
+async function logout() {//выход из уч. записи
+    $.get(socket + "/logout", function (data) {
         $("#loginbutton").html("Войти");
         document.getElementById('id01').style.display = 'none';
         showEngineDescription();
@@ -390,13 +393,13 @@ async function logout() {
 }
 
 async function showTechicalDescription() {
-    $.get( socket + "/other", function (data) {
+    $.get(socket + "/other", function (data) {
         $("#info").html(data[2].description);
     });
     if (!isModelLoaded) loadModel();
 }
 
-async function showUsers() {
+async function showUsers() {//получает список пользователей
     $.post({
         traditional: true,
         url: '/getUsers',
@@ -408,7 +411,7 @@ async function showUsers() {
     });
 }
 
-async function removeUser(id) {
+async function removeUser(id) {//удалить пользователя
     let data = { id: id };
     $.post({
         traditional: true,
